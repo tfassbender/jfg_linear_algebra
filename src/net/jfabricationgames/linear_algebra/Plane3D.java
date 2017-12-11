@@ -10,7 +10,7 @@ public class Plane3D {
 	
 	public Vector3D getIntersectionPoint(Line3D line) throws LinearAlgebraException {
 		//check whether the line is parallel to the plane
-		if (Vector3D.isLinearlyDependent(line.direction, direction1, direction2)) {
+		if (Vector3D.isLinearlyDependentVectors(line.direction, direction1, direction2)) {
 			if (isOnPlane(line.start)) {
 				//line is in the plane
 				throw new LinearAlgebraException("The line is in the plane.");
@@ -60,7 +60,7 @@ public class Plane3D {
 	}
 	
 	public boolean isOnPlane(Line3D line) {
-		return isOnPlane(line.start) && Vector3D.isLinearlyDependent(line.direction, direction1, direction2);
+		return isOnPlane(line.start) && Vector3D.isLinearlyDependentVectors(line.direction, direction1, direction2);
 	}
 	
 	public boolean isOnPlane(Vector3D point) {

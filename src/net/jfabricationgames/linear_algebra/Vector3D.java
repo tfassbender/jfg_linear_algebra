@@ -27,10 +27,6 @@ public class Vector3D {
 		this.x = x;
 		this.y = y;
 		this.z = z;
-		double len = length();
-		this.x /= len;
-		this.y /= len;
-		this.z /= len;
 	}
 	public Vector3D(double... val) {
 		if (val.length != 3) {
@@ -62,11 +58,34 @@ public class Vector3D {
 		x = Math.cos(angleXY * Math.PI / 180);
 		y = Math.sin(angleXY * Math.PI / 180);
 		z = Math.sin(angleZ * Math.PI / 180);
+		double len = length();
+		x /= len;
+		y /= len;
+		z /= len;
 	}
 	
 	private Vector3D(Vector3D clone) {
 		this.x = clone.x;
 		this.y = clone.y;
+	}
+	
+	@Override
+	public Vector3D clone() {
+		return new Vector3D(this);
+	}
+	
+	@Override
+	public String toString() {
+		return "Vector3D[x: " + x + " y: " + y + " z:" + z + "]";
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof Vector3D) {
+			Vector3D v = (Vector3D) obj;
+			return Math.abs(x-v.x) < 1e-8 && Math.abs(y-v.y) < 1e-8 && Math.abs(z-v.z) < 1e-8;
+		}
+		return false;
 	}
 
 	/**
@@ -74,15 +93,6 @@ public class Vector3D {
 	 */
 	public double[] asArray() {
 		return new double[] {x, y, z};
-	}
-	
-	public Vector3D clone() {
-		return new Vector3D(this);
-	}
-	
-	@Override
-	public String toString() {
-		return "Vector3D[x: " + x + " y: " + y + "z:" + z + "]";
 	}
 	
 	/**
@@ -102,9 +112,9 @@ public class Vector3D {
 	 */
 	public double length(int norm) {
 		if (norm == Integer.MAX_VALUE) {
-			return Math.max(x, y);
+			return Math.max(Math.max(x, y), z);
 		}
-		return Math.pow(Math.pow(x, norm) + Math.pow(y, norm), 1.0/norm);
+		return Math.pow(Math.pow(x, norm) + Math.pow(y, norm) + Math.pow(z, norm), 1.0/norm);
 	}
 	
 	/**
@@ -144,7 +154,7 @@ public class Vector3D {
 	 * 		The projected vector.
 	 */
 	public Vector3D project(Vector3D vec) {
-		return setLength(scalar(vec) / Math.pow(length(), 2));
+		return mult(scalar(vec) / Math.pow(length(), 2));
 	}
 	
 	/**
@@ -208,7 +218,7 @@ public class Vector3D {
 	 * @return
 	 * 		True if the vectors are linearly dependent. False otherwise.
 	 */
-	public static boolean isLinearlyDependent(Vector3D... vectors) {
+	public static boolean isLinearlyDependentVectors(Vector3D... vectors) {
 		if (vectors.length < 2) {
 			return false;
 		}
@@ -330,7 +340,7 @@ public class Vector3D {
 	 * 		The angle difference of the two vectors (from 0° to 180°).
 	 */
 	public double getAngleTo(Vector3D vec) {
-		double angle = Math.acos(scalar(vec) / (length() * vec.length()));
+		double angle = Math.acos(scalar(vec) / (length() * vec.length())) * 180 / Math.PI;
 		if (angle > 180) {
 			angle = 360 - angle;
 		}
@@ -346,8 +356,8 @@ public class Vector3D {
 	 * @return
 	 * 		The vector from this points position vector to the other point.
 	 */
-	public Vector2D vectorTo(Vector2D vec) {
-		return new Vector2D(vec.x - x, vec.y - y);
+	public Vector3D vectorTo(Vector3D vec) {
+		return new Vector3D(vec.x - x, vec.y - y, vec.z - z);
 	}
 	
 	/**

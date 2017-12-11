@@ -50,8 +50,23 @@ public class Vector2D implements Cloneable {
 	/**
 	 * Clone this Vector2D object.
 	 */
+	@Override
 	public Vector2D clone() {
 		return new Vector2D(this);
+	}
+	
+	@Override
+	public String toString() {
+		return "Vector2D[x: " + x + " y: " + y + "]";
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof Vector2D) {
+			Vector2D v = (Vector2D) obj;
+			return Math.abs(x-v.x) < 1e-8 && Math.abs(y-v.y) < 1e-8;
+		}
+		return false;
 	}
 	
 	/**
@@ -59,11 +74,6 @@ public class Vector2D implements Cloneable {
 	 */
 	public double[] asArray() {
 		return new double[] {x, y};
-	}
-	
-	@Override
-	public String toString() {
-		return "Vector2D[x: " + x + " y: " + y + "]";
 	}
 	
 	/**
@@ -99,6 +109,19 @@ public class Vector2D implements Cloneable {
 	 */
 	public Vector2D rotate(double degrees) {
 		return new Vector2D(getAngle() + degrees).setLength(length());
+	}
+	
+	/**
+	 * Project the vector given as parameter on this vector.
+	 * 
+	 * @param vec
+	 * 		The vector that is to be projected on this vector.
+	 * 
+	 * @return
+	 * 		The projected vector.
+	 */
+	public Vector2D project(Vector2D vec) {
+		return mult(scalar(vec) / Math.pow(length(), 2));
 	}
 	
 	/**
@@ -162,7 +185,7 @@ public class Vector2D implements Cloneable {
 	 * @return
 	 * 		True if the vectors are linearly dependent. False otherwise.
 	 */
-	public static boolean isLinearlyDependent(Vector2D... vectors) {
+	public static boolean isLinearlyDependentVectors(Vector2D... vectors) {
 		if (vectors.length < 2) {
 			return false;
 		}
