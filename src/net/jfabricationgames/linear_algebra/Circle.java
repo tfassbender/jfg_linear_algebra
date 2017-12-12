@@ -42,7 +42,7 @@ public class Circle extends Area2D {
 		}
 		else if (m1.distance(m2) < epsilon) {
 			//circles have the same mid point
-			if (r1-r2 < epsilon) {
+			if (Math.abs(r1-r2) < epsilon) {
 				//circles are equal
 				return new Vector2D[0];				
 			}
@@ -53,8 +53,7 @@ public class Circle extends Area2D {
 		}
 		else if (Math.abs(m1.distance(m2) - (r1+r2)) < epsilon) {
 			//one point solution
-			new Vector2D(0, 0);
-			return new Vector2D[] {new Vector2D((m1.x+m2.x)/2, (m1.y+m2.y)/2)};
+			return new Vector2D[] {m1.vectorTo(m2).setLength(r1)};
 		}
 		else {
 			//two point solution
@@ -81,9 +80,9 @@ public class Circle extends Area2D {
 	 * @return
 	 * 		The approximative intersecting area of the circles or null if they don't intersect.
 	 */
-	public Diamond2D calculateIntersectingDiamond(Circle circle) {
+	public Kite2D calculateIntersectingKite(Circle circle) {
 		Vector2D m1 = getMiddle();
-		Vector2D m2 = getMiddle();
+		Vector2D m2 = circle.getMiddle();
 		double r1 = radius;
 		double r2 = circle.getRadius();
 		Vector2D[] intersectionPoints = getIntercectionPoints(circle);
@@ -92,8 +91,14 @@ public class Circle extends Area2D {
 			Vector2D[] diamondPoints = new Vector2D[2];
 			diamondPoints[0] = m1.add(m1.vectorTo(m2).setLength(r1));
 			diamondPoints[1] = m2.add(m2.vectorTo(m1).setLength(r2));
-			Diamond2D diamond = new Diamond2D(intersectionPoints[0], diamondPoints[0], intersectionPoints[1], diamondPoints[1]);
-			return diamond;
+			Kite2D kite = new Kite2D(intersectionPoints[0], diamondPoints[0], intersectionPoints[1], diamondPoints[1]);
+			return kite;
+		}
+		else if (intersectionPoints != null && intersectionPoints.length == 0) {
+			//circles are the same
+			Kite2D kite = new Kite2D(m1.add(new Vector2D(1, 0).setLength(r1)), m1.add(new Vector2D(0, 1).setLength(r1)), 
+					m1.add(new Vector2D(-1, 0).setLength(r1)), m1.add(new Vector2D(0, -1).setLength(r1)));
+			return kite;
 		}
 		return null;
 	}
