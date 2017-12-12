@@ -9,12 +9,16 @@ import java.util.List;
 public class Area2D {
 	
 	protected List<Vector2D> points;
-
-	public Area2D() {
-		
-	}
+	
+	protected boolean convex;
+	
 	public Area2D(List<Vector2D> points) {
 		this.points = points;
+		//don't check because circle is a subclass with one point.
+		/*if (points == null || points.size() < 3) {
+			throw new LinearAlgebraException("Areas have at least 3 points.");
+		}*/
+		convex = isConvex();
 	}
 	public Area2D(Vector2D... points) {
 		this(Arrays.asList(points));
@@ -23,28 +27,76 @@ public class Area2D {
 	public List<Vector2D> getPoints() {
 		return points;
 	}
-	public void setPoints(List<Vector2D> points) {
-		this.points = points;
+	
+	/**
+	 * Get the size of the area.
+	 * This will only give the right result if the area is a convex polygon.
+	 * 
+	 * @return
+	 * 		The size of this area.
+	 * 
+	 * @throws LinearAlgebraException
+	 * 		A {@link LinearAlgebraException} is thrown when the area is no convex polygon.
+	 */
+	public double getSize() throws LinearAlgebraException {
+		//https://en.wikipedia.org/wiki/Polygon#Area_and_centroid
+		if (!convex) {
+			throw new LinearAlgebraException("The polygon area is not convex. This algorithm doesn't work for this area.");
+		}
+		double size = 0;
+		int n = points.size();
+		for (int i = 0; i < points.size(); i++) {
+			size += points.get(i).x * points.get((i+1)%n).y - points.get((i+1)%n).x * points.get(i).y;
+		}
+		size *= 0.5;
+		return size;
+	}
+	
+	/**
+	 * Check whether this polygon is convex.
+	 * 
+	 * @return
+	 * 		True if this polygon area is convex. False otherwise.
+	 */
+	public boolean isConvex() {
+		//https://stackoverflow.com/questions/471962/how-do-determine-if-a-polygon-is-complex-convex-nonconvex
+		if (points.size() < 4) {
+			return true;
+		}
+		boolean sign = false;
+		int n = points.size();
+		for (int i = 0; i < n; i++) {
+			double dx1 = points.get((i + 2) % n).x - points.get((i + 1) % n).x;
+			double dy1 = points.get((i + 2) % n).y - points.get((i + 1) % n).y;
+			double dx2 = points.get(i).x - points.get((i + 1) % n).x;
+			double dy2 = points.get(i).y - points.get((i + 1) % n).y;
+			double zcrossproduct = dx1 * dy2 - dy1 * dx2;
+			if (i == 0) {
+				sign = zcrossproduct > 0;
+			}
+			else if (sign != (zcrossproduct > 0)) {
+				return false;
+			}
+		}
+		return true;
 	}
 	
 	/**
 	 * Check whether the point p is in the polygon build of the points in polygon.
-	 * All points are given as java.awt.geom.Point2D.Double.
+	 * This algorithm will only work for convex areas (which is tested first in the algorithm).
 	 * 
 	 * @param p
 	 * 		The point to be checked
 	 * 
-	 * @param polygon
-	 * 		The edge points of the polygon as a list
-	 * 
 	 * @return
 	 * 		Returns true if p is inside of the polygon. False otherwise.
 	 * 
-	 * @throws GeometricalException
-	 * 		A GeometricalException is thrown if the answer couldn't be calculated.
+	 * @throws LinearAlgebraException
+	 * 		A {@link LinearAlgebraException} is thrown if the area is not convex.
 	 */
 	public boolean isPointInArea(Vector2D p) throws LinearAlgebraException {
-		Vector2D start = p.clone();
+		//this algorithm seems not to be working right... use triangle area instead
+		/*Vector2D start = p.clone();
 		Vector2D vec;//a vector in any direction
 		int crossPoints = 0;//count the number of lines the vector from the point crosses
 		int triesLeft = 100;//if you can't find an answer after 100 tests interrupt
@@ -94,7 +146,14 @@ public class Area2D {
 				return crossPoints % 2 == 1;
 			}
 		}
-		throw new LinearAlgebraException("Calculation failed. No result found");
+		throw new LinearAlgebraException("Calculation failed. No result found");*/
+		double size = getSize();
+		double triangleAreaSum = 0;//sum up the areas from the point to the area points
+		int n = points.size();
+		for (int i = 0; i < points.size(); i++) {
+			triangleAreaSum += calculateTriangleArea(p, points.get(i), points.get((i+1)%n));
+		}
+		return Math.abs(size - triangleAreaSum) <= 1e-8;
 	}
 	
 	/**

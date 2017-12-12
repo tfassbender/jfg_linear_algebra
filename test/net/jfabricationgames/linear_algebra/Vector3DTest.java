@@ -14,10 +14,12 @@ public class Vector3DTest {
 		Vector3D v = new Vector3D(0, 0);
 		Vector3D v2 = new Vector3D(0, 90);
 		Vector3D v3 = new Vector3D(90, -90);
+		Vector3D v4 = new Vector3D(0, 45);
 		
 		assertEquals(new Vector3D(1, 0, 0), v);
 		assertEquals(new Vector3D(0, 0, 1).setLength(1), v2);
 		assertEquals(new Vector3D(0, 0, -1).setLength(1), v3);
+		assertEquals(new Vector3D(1, 0, 1).setLength(1), v4);
 	}
 	
 	@Test

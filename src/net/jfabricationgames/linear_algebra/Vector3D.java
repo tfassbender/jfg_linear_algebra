@@ -55,8 +55,8 @@ public class Vector3D {
 	 * 		The angle of the new vector (in degree) for the Z direction (from -90 to 90).
 	 */
 	public Vector3D(double angleXY, double angleZ) {
-		x = Math.cos(angleXY * Math.PI / 180);
-		y = Math.sin(angleXY * Math.PI / 180);
+		x = Math.cos(angleXY * Math.PI / 180) * Math.cos(angleZ * Math.PI / 180);
+		y = Math.sin(angleXY * Math.PI / 180) * Math.cos(angleZ * Math.PI / 180);
 		z = Math.sin(angleZ * Math.PI / 180);
 		double len = length();
 		x /= len;
