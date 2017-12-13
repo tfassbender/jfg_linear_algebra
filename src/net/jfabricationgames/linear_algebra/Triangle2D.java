@@ -1,9 +1,13 @@
 package net.jfabricationgames.linear_algebra;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class Triangle2D extends Area2D {
 	
+	public Triangle2D(Vector2D... points) {
+		this(Arrays.asList(points));
+	}
 	public Triangle2D(List<Vector2D> points) throws LinearAlgebraException {
 		super(points);
 		if (points.size() != 3) {

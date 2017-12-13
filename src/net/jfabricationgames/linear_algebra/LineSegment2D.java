@@ -58,9 +58,15 @@ public class LineSegment2D extends Line2D {
 	@Override
 	public boolean isPointOnLine(Vector2D point) {
 		//the calculation of the parameter t is equal in all cases (x and y).
-		double t1 = direction.x == 0 ? 0 : ((start.x - point.x) / direction.x);
-		double t2 = direction.y == 0 ? 0 : ((start.y - point.y) / direction.y);
-		return Math.abs(t1-t2) < 1e-5 && t1 != 0 && t1 >= 0 && t1 <= 1;
+		double t1 = direction.x == 0 ? 0 : -((start.x - point.x) / direction.x);
+		double t2 = direction.y == 0 ? 0 : -((start.y - point.y) / direction.y);
+		if (direction.x == 0) {
+			return Math.abs(start.x - point.x) < 1e-8 && t2 >= 0 && t2 <= 1;
+		}
+		else if (direction.y == 0) {
+			return Math.abs(start.y - point.y) < 1e-8 && t1 >= 0 && t1 <= 1;
+		}
+		return Math.abs(t1-t2) < 1e-5 && t1 >= 0 && t1 <= 1;
 	}
 	
 	/**
@@ -74,24 +80,17 @@ public class LineSegment2D extends Line2D {
 	 */
 	@Override
 	public double calculateMinDistToPoint(Vector2D point) {
-		try {
-            //find the orthogonal vector on line
-        	double[] normVec = new double[] {-direction.y * 100.0 / direction.x, 100.0};//define the second part as 100
-        	//calculate the parameters
-        	double t = (start.y - point.y + (normVec[1]/normVec[0]) * (point.x - start.x)) / (direction.x * (normVec[1]/normVec[0]) - direction.y);
-        	double a = (start.x + t*direction.x - point.x) / normVec[0];
-        	//calculate the intersection point of the two lines
-        	Vector2D inter = new Vector2D(point.x + a*normVec[0], point.y + a*normVec[1]);
-        	if (isPointOnLine(inter)) {
-            	return Math.hypot(inter.x-point.x, inter.y-point.y);
-        	}
-        	else {
-        		//the shortest distance is from one of the end points
-        		return Math.min(start.distance(point), start.add(direction).distance(point));
-        	}
-        }
-        catch (Exception e) {
-            return Double.NaN;
-        }
+		//project the vector from a point of the line on the line; then calculate the distance between the two points
+		Vector2D toPoint = start.vectorTo(point);
+		Vector2D projected = direction.project(toPoint);
+		Vector2D p2 = start.add(projected);
+		if (isPointOnLine(p2)) {
+			//the projected point is one the line
+			return point.distance(p2);
+		}
+		else {
+			//the shortest distance is from one of the edges
+			return Math.min(start.distance(point), start.add(direction).distance(point));
+		}
     }
 }

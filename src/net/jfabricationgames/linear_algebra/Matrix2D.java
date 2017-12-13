@@ -73,7 +73,7 @@ public class Matrix2D {
 	 * Clone this matrix.
 	 */
 	public Matrix2D clone() {
-		return new Matrix2D(entries);
+		return new Matrix2D(entries, true);
 	}
 	
 	/**
@@ -89,7 +89,7 @@ public class Matrix2D {
 	 * 		The value at the position.
 	 */
 	public double at(int x, int y) {
-		return entries[y][x];
+		return entries[x][y];
 	}
 	/**
 	 * Change the matrix value at a position to a new value.
@@ -104,7 +104,7 @@ public class Matrix2D {
 	 * 		The new value.
 	 */
 	public void set(int x, int y, double val) {
-		entries[y][x] = val;
+		entries[x][y] = val;
 	}
 	
 	/**
@@ -131,7 +131,7 @@ public class Matrix2D {
 			double[][] entries = new double[dimensions[0]][dimensions[1]];//change x and y dimension
 			for (int i = 0; i < dimensions[0]; i++) {
 				for (int j = 0; j < dimensions[1]; j++) {
-					entries[j][i] = matrix.at(i, j);
+					entries[i][j] = matrix.at(j, i);
 				}
 			}
 			matrix.entries = entries;
