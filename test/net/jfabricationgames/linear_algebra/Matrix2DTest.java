@@ -39,6 +39,8 @@ public class Matrix2DTest {
 				new Vector3D(4, 5, 6), new Vector3D(7, 8, 9));
 		Matrix2D m2 = m.clone();
 		
+		assertTrue(m.equals(m2));
+		
 		assertEquals(m.at(0, 0), m2.at(0,  0), EPSILON);
 		assertEquals(m.at(0, 2), m2.at(0,  2), EPSILON);
 		assertEquals(m.at(1, 0), m2.at(1,  0), EPSILON);
@@ -96,6 +98,8 @@ public class Matrix2DTest {
 		
 		Matrix2D m3 = new Matrix2D(Matrix2D.Orientation.ROW, new Vector3D(1, 2, 3));
 		Matrix2D m4 = m3.transpose();
+		
+		assertTrue(m.equals(m.transpose().transpose()));
 
 		assertEquals(1, m2.at(0,  0), EPSILON);
 		assertEquals(3, m2.at(2,  0), EPSILON);

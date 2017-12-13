@@ -71,13 +71,7 @@ public class Gauss {
 					if (!swaped && Math.abs(m.at(i, j)) > EPSILON) {
 						//line j has a non-zero-value -> swap lines i and j
 						swaps.add(new int[] {i, j});
-						double[] tmpLine = m.entries[i];
-						m.entries[i] = m.entries[j];
-						m.entries[j] = tmpLine;
-						//also swap the b vector entries
-						double tmp = b[i];
-						b[i] = b[j];
-						b[j] = tmp;
+						swap(m, b, i, j);
 						swaped = true;
 					}
 				}
@@ -93,7 +87,7 @@ public class Gauss {
 					m.set(k, j, m.at(k, j) - (m.at(i, j) * m.at(k, i) / m.at(i, i)));
 				}
 				//also change the entry in the b vector
-				b[i] = b[i] - (m.at(i, j) * b[i] / m.at(i, i));
+				b[j] = b[j] - (m.at(i, j) * b[i] / m.at(i, i));
 				//set this value at last because it's needed for the other calculations
 				m.set(i, j, 0);//always bring to zero -> no calculation needed
 			}
@@ -101,6 +95,21 @@ public class Gauss {
 		Gauss gauss = new Gauss(m, b, swaps);
 		gauss.beforeSolutionCalculation = new Gauss(m.clone(), b.clone(), swaps);
 		return gauss;
+	}
+	
+	/**
+	 * Swap two lines of a matrix.
+	 */
+	private static void swap(Matrix2D m, double[] b, int i, int j) {
+		double tmp;
+		for (int k = 0; k < m.entries.length; k++) {
+			tmp = m.entries[k][i];
+			m.entries[k][i] = m.entries[k][j];
+			m.entries[k][j] = tmp;
+			tmp = b[i];
+			b[i] = b[j];
+			b[j] = tmp;
+		}
 	}
 	
 	/**
@@ -175,14 +184,16 @@ public class Gauss {
 		//swap the lines and vector entries back (last entry first)
 		for (int i = swaps.size()-1; i >= 0; i--) {
 			int[] swap = swaps.get(i);
-			double[] tmpLine = m.entries[swap[0]];
+			/*double[] tmpLine = m.entries[swap[0]];
 			m.entries[swap[0]] = m.entries[swap[1]];
 			m.entries[swap[1]] = tmpLine;
 			//also swap the b vector entries
 			double tmp = b[swap[0]];
 			b[swap[0]] = b[swap[1]];
-			b[swap[1]] = tmp;
+			b[swap[1]] = tmp;*/
+			swap(m, b, swap[0], swap[1]);
 			//and the x vector entries
+			double tmp;
 			tmp = x[swap[0]];
 			x[swap[0]] = x[swap[1]];
 			x[swap[1]] = tmp;

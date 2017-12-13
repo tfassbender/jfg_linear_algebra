@@ -69,9 +69,41 @@ public class Matrix2D {
 		}
 	}
 	
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof Matrix2D) {
+			Matrix2D m = (Matrix2D) obj;
+			if (entries.length == m.entries.length && entries[0].length == m.entries[0].length) {
+				boolean equal = true;
+				for (int i = 0; i < entries.length; i++) {
+					for (int j = 0; j < entries[0].length; j++) {
+						equal &= Math.abs(entries[i][j] - m.entries[i][j]) < 1e-8; 
+					}
+				}
+				return equal;				
+			}
+		}
+		return false;
+	}
+	
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("Matrix2D: ");
+		for (int i = 0; i < entries[0].length; i++) {
+			sb.append('[');
+			for (int j = 0; j < entries.length; j++) {
+				sb.append(String.format(" %.5f ", entries[j][i]));
+			}
+			sb.append("]\n          ");
+		}
+		return sb.toString();
+	}
+	
 	/**
 	 * Clone this matrix.
 	 */
+	@Override
 	public Matrix2D clone() {
 		return new Matrix2D(entries, true);
 	}
