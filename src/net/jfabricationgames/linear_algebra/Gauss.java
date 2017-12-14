@@ -250,11 +250,12 @@ public class Gauss {
 			//the matrix is quadratic or is bigger in y direction (e.g. a 3x3 matrix or a 4x3 matrix)
 			//in this case the last lines must be zero-lines
 			boolean zeroLines = true;
+			int zeroLinesNum = 0;
 			//it could also be a zero line when the last two lines are equal (that isn't brought to zero in the calculateGauss algorithm)
 			//make it a zero line if so
 			boolean lastTwoLinesEqual = true;
-			for (int i = 0; i < dimensions[1]; i++) {
-				lastTwoLinesEqual &= Math.abs(m.at(i, dimensions[0]-2) - m.at(i, dimensions[0]-1)) < EPSILON; 
+			for (int j = 0; j < dimensions[1]; j++) {
+				lastTwoLinesEqual &= Math.abs(m.at(j, dimensions[0]-2) - m.at(j, dimensions[0]-1)) < EPSILON;
 			}
 			//also check the b-vector
 			lastTwoLinesEqual &= Math.abs(b[dimensions[0]-2] - b[dimensions[0]-1]) < EPSILON;
@@ -265,17 +266,20 @@ public class Gauss {
 				}
 				b[dimensions[0]-1] = 0;
 			}
-			if (!lastTwoLinesEqual) {//otherwise the last line is always zero and it doesn't need to be checked.
+			for (int k = 0; k < dimensions[0]-1; k++) {
 				for (int i = dimensions[0]-1; i < dimensions[0]; i++) {
 					for (int j = 0; j < dimensions[1]; j++) {
 						//zero line in m
-						zeroLines &= Math.abs(m.at(j, i)) < EPSILON;
+						zeroLines &= Math.abs(m.at(j, i-k)) < EPSILON;
 					}
 					//b is also zero
-					zeroLines &= Math.abs(b[i]) < EPSILON;
+					zeroLines &= Math.abs(b[i-k]) < EPSILON;
+					if (zeroLines) {
+						zeroLinesNum++;
+					}
 				}
 			}
-			if (!zeroLines) {
+			if (zeroLinesNum == 0) {
 				//if the matrix is quadratic try to calculate the single solution x-vector
 				if (dimensions[1] == dimensions[0]) {
 					try {
@@ -304,6 +308,20 @@ public class Gauss {
 			//solve an alternative problem with a smaller matrix instead
 			newDimension[1] = dimensions[0]-1;
 			newDimension[0] = dimensions[0]-1;
+			
+			if (dimensions[0]-1 > dimensions[1]) {
+				//the alternative system is bigger than the matrix and can't be calculated
+				//solve an even smaller system instead
+				newDimension[1] = dimensions[1];
+				newDimension[0] = dimensions[1];
+				
+				//only if the last lines are zero lines the alternative system can solve the complete equation system
+				if (zeroLinesNum < dimensions[0] - dimensions[1]) {
+					//return null for the system can't be solved
+					solutions = null;
+					return;
+				}
+			}
 		}
 		else {
 			solutionsError = "The solution has more than one free parameter. Can't be calculated.";

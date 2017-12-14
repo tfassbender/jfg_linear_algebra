@@ -62,13 +62,13 @@ public class Line3D {
 	public double calculateT(Vector3D point) {
 		if (isPointOnLine(point)) {
 			if (direction.x != 0) {
-				return ((start.x - point.x) / direction.x);				
+				return -((start.x - point.x) / direction.x);				
 			}
 			else if (direction.y != 0) {
-				return ((start.y - point.y) / direction.y);
+				return -((start.y - point.y) / direction.y);
 			}
 			else {
-				return ((start.z - point.z) / direction.z);
+				return -((start.z - point.z) / direction.z);
 			}
 		}
 		return Double.NaN;
@@ -90,7 +90,7 @@ public class Line3D {
 		}
 		//create an equation system and solve it to check if the lines cross
 		//create a 2x2 system to calculate t1 and t2
-		Matrix2D m = new Matrix2D(Matrix2D.Orientation.ROW, new double[] {direction.x, direction.y}, new double[] {line.direction.x, line.direction.y});
+		Matrix2D m = new Matrix2D(Matrix2D.Orientation.COL, new double[] {direction.x, direction.y}, new double[] {-line.direction.x, -line.direction.y});
 		double[] b = new double[] {line.start.x - start.x, line.start.y - start.y};
 		Gauss gauss = Gauss.calculateGauss(m, b);
 		try {
@@ -100,7 +100,7 @@ public class Line3D {
 				return null;
 			}
 			//if x can be calculated it holds t1 and t2 -> insert in the third equation and check if its true
-			if ((x[0] * direction.z - x[1] * line.direction.z) - (line.start.z - start.z) < 1e-5) {
+			if (Math.abs((x[0] * direction.z - x[1] * line.direction.z) - (line.start.z - start.z)) < 1e-5) {
 				//the third equation results in a true statement -> the lines have a cross-point
 				return start.add(direction.mult(x[0]));
 			}

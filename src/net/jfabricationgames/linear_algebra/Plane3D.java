@@ -8,6 +8,12 @@ public class Plane3D {
 	protected Vector3D direction1;
 	protected Vector3D direction2;
 	
+	public Plane3D(Vector3D start, Vector3D direction1, Vector3D direction2) {
+		this.start = start;
+		this.direction1 = direction1;
+		this.direction2 = direction2;
+	}
+	
 	public Vector3D getIntersectionPoint(Line3D line) throws LinearAlgebraException {
 		//check whether the line is parallel to the plane
 		if (Vector3D.isLinearlyDependentVectors(line.direction, direction1, direction2)) {
