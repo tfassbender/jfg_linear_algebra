@@ -200,7 +200,7 @@ public class Matrix2D {
 	}
 	
 	/**
-	 * Get the dimensions of this matrix (x and y).
+	 * Get the dimensions of this matrix (y and x).
 	 * 
 	 * @return
 	 * 		The matrix dimensions as integer-Array.
