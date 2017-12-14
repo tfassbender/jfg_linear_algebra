@@ -11,7 +11,7 @@ public class Matrix2D {
 	
 	public Matrix2D(Orientation orientation, double[]... entries) {
 		this(entries);
-		if (orientation == Orientation.COL) {
+		if (orientation == Orientation.ROW) {
 			transpose(this);
 		}
 	}
@@ -23,7 +23,7 @@ public class Matrix2D {
 		for (int i = 0; i < entries.length; i++) {
 			this.entries[i] = entries[i].asArray();
 		}
-		if (orientation == Orientation.COL) {
+		if (orientation == Orientation.ROW) {
 			transpose(this);
 		}
 	}
@@ -35,7 +35,7 @@ public class Matrix2D {
 		for (int i = 0; i < entries.length; i++) {
 			this.entries[i] = entries[i].asArray();
 		}
-		if (orientation == Orientation.COL) {
+		if (orientation == Orientation.ROW) {
 			transpose(this);
 		}
 	}

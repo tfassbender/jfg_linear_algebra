@@ -11,7 +11,7 @@ public class GaussTest {
 	@Test
 	public void testCalculateGauss() {
 		//start with a very simple system
-		Matrix2D m = new Matrix2D(Matrix2D.Orientation.COL, new Vector2D(1, 2), new Vector2D(1, 3));
+		Matrix2D m = new Matrix2D(Matrix2D.Orientation.ROW, new Vector2D(1, 2), new Vector2D(1, 3));
 		double[] b = new double[] {1, 2};
 		Gauss gauss = Gauss.calculateGauss(m, b);
 		
@@ -26,7 +26,7 @@ public class GaussTest {
 		//1 2 3 | 6          1 2 3 | 6                1
 		//1 3 5 | 9     =>   0 1 2 | 3      =>    x = 1
 		//1 4 8 | 13         0 0 1 | 1                1
-		Matrix2D m2 = new Matrix2D(Matrix2D.Orientation.COL, new Vector3D(1, 2, 3), new Vector3D(1, 3, 5), new Vector3D(1, 4, 8));
+		Matrix2D m2 = new Matrix2D(Matrix2D.Orientation.ROW, new Vector3D(1, 2, 3), new Vector3D(1, 3, 5), new Vector3D(1, 4, 8));
 		double[] b2 = new double[] {6, 9, 13};
 		Gauss gauss2 = Gauss.calculateGauss(m2, b2);
 		
@@ -37,7 +37,7 @@ public class GaussTest {
 		assertArrayEquals(new double[] {6, 3, 1}, gauss2.getB(), EPSILON);
 		
 		//a not so simple 3x3 system
-		Matrix2D m3 = new Matrix2D(Matrix2D.Orientation.COL, new Vector3D(1, 3, 5), new Vector3D(3, -3, 9), new Vector3D(-1, 7, 2));
+		Matrix2D m3 = new Matrix2D(Matrix2D.Orientation.ROW, new Vector3D(1, 3, 5), new Vector3D(3, -3, 9), new Vector3D(-1, 7, 2));
 		double[] b3 = new double[] {3, 7, 2};
 		Gauss gauss3 = Gauss.calculateGauss(m3, b3);
 		
@@ -47,7 +47,7 @@ public class GaussTest {
 		assertArrayEquals(new double[] {3, -2, 3.33333333}, gauss3.getB(), EPSILON);
 		
 		//solution calculated by internet gauss solver
-		Matrix2D m4 = new Matrix2D(Matrix2D.Orientation.COL, new Vector3D(5, 7, 13), new Vector3D(7, 9, 2), new Vector3D(4, 8, 8));
+		Matrix2D m4 = new Matrix2D(Matrix2D.Orientation.ROW, new Vector3D(5, 7, 13), new Vector3D(7, 9, 2), new Vector3D(4, 8, 8));
 		double[] b4 = new double[] {2, 11, 8};
 		Gauss gauss4 = Gauss.calculateGauss(m4, b4);
 		
@@ -57,7 +57,7 @@ public class GaussTest {
 		assertArrayEquals(new double[] {2, 8.2, 31}, gauss4.getB(), EPSILON);
 		
 		//a solution where the lines have to be switched
-		Matrix2D m5 = new Matrix2D(Matrix2D.Orientation.COL, new Vector3D(1, 2, 3), new Vector3D(1, 2, 5), new Vector3D(3, 4, 6));
+		Matrix2D m5 = new Matrix2D(Matrix2D.Orientation.ROW, new Vector3D(1, 2, 3), new Vector3D(1, 2, 5), new Vector3D(3, 4, 6));
 		double[] b5 = new double[] {10, 3, 9};
 		Gauss gauss5 = Gauss.calculateGauss(m5, b5);
 		
@@ -68,7 +68,7 @@ public class GaussTest {
 		assertArrayEquals(new double[] {10, -21, -7}, gauss5.getB(), EPSILON);
 		
 		//a system where the swapping is not possible (but can be solved with multiple solutions with the given b-vector)
-		Matrix2D m6 = new Matrix2D(Matrix2D.Orientation.COL, new Vector3D(1, 2, 3), new Vector3D(1, 2, 5), new Vector3D(2, 4, 8));
+		Matrix2D m6 = new Matrix2D(Matrix2D.Orientation.ROW, new Vector3D(1, 2, 3), new Vector3D(1, 2, 5), new Vector3D(2, 4, 8));
 		double[] b6 = new double[] {10, 3, 13};
 		Gauss gauss6 = Gauss.calculateGauss(m6, b6);
 		
@@ -79,7 +79,7 @@ public class GaussTest {
 		assertArrayEquals(new double[] {10, -7, -7}, gauss6.getB(), EPSILON);
 		
 		//another system where the swapping is not possible (but can NOT be solved with the given b-vector; but the algorithm can be iterated)
-		Matrix2D m7 = new Matrix2D(Matrix2D.Orientation.COL, new Vector3D(1, 2, 3), new Vector3D(1, 2, 5), new Vector3D(2, 4, 8));
+		Matrix2D m7 = new Matrix2D(Matrix2D.Orientation.ROW, new Vector3D(1, 2, 3), new Vector3D(1, 2, 5), new Vector3D(2, 4, 8));
 		double[] b7 = new double[] {10, 3, 0};
 		Gauss gauss7 = Gauss.calculateGauss(m7, b7);
 		
@@ -90,7 +90,7 @@ public class GaussTest {
 		assertArrayEquals(new double[] {10, -7, -20}, gauss7.getB(), EPSILON);
 		
 		//a 4x3 system
-		Matrix2D m8 = new Matrix2D(Matrix2D.Orientation.ROW, new Vector3D(1, 2, 3), new Vector3D(1, 3, 5), new Vector3D(2, 8, 8), new Vector3D(3, 8, 5));
+		Matrix2D m8 = new Matrix2D(Matrix2D.Orientation.COL, new Vector3D(1, 2, 3), new Vector3D(1, 3, 5), new Vector3D(2, 8, 8), new Vector3D(3, 8, 5));
 		double[] b8 = new double[] {1, 1, 1};
 		Gauss gauss8 = Gauss.calculateGauss(m8, b8);
 		
@@ -102,7 +102,7 @@ public class GaussTest {
 		assertArrayEquals(new double[] {1, -1, 0}, gauss8.getB(), EPSILON);
 		
 		//a similar 4x3 system but this one can only be solved with two parameters (which this implementation can't calculate)
-		Matrix2D m9 = new Matrix2D(Matrix2D.Orientation.ROW, new Vector3D(1, 2, 3), new Vector3D(1, 3, 5), new Vector3D(2, 8, 14), new Vector3D(3, 8, 13));
+		Matrix2D m9 = new Matrix2D(Matrix2D.Orientation.COL, new Vector3D(1, 2, 3), new Vector3D(1, 3, 5), new Vector3D(2, 8, 14), new Vector3D(3, 8, 13));
 		double[] b9 = new double[] {1, 1, 1};
 		Gauss gauss9 = Gauss.calculateGauss(m9, b9);
 		
@@ -114,7 +114,7 @@ public class GaussTest {
 		assertArrayEquals(new double[] {1, -1, 0}, gauss9.getB(), EPSILON);
 		
 		//another similar 3x4 system but this one can NOT be solved (no parameters; it just has no solution)
-		Matrix2D m10 = new Matrix2D(Matrix2D.Orientation.ROW, new Vector3D(1, 2, 3), new Vector3D(1, 3, 5), new Vector3D(2, 8, 14), new Vector3D(3, 8, 13));
+		Matrix2D m10 = new Matrix2D(Matrix2D.Orientation.COL, new Vector3D(1, 2, 3), new Vector3D(1, 3, 5), new Vector3D(2, 8, 14), new Vector3D(3, 8, 13));
 		double[] b10 = new double[] {1, 1, 2};
 		Gauss gauss10 = Gauss.calculateGauss(m10, b10);
 		
@@ -126,7 +126,7 @@ public class GaussTest {
 		assertArrayEquals(new double[] {1, -1, 1}, gauss10.getB(), EPSILON);
 		
 		//a 3x2 system with a single solution
-		Matrix2D m11 = new Matrix2D(Matrix2D.Orientation.COL, new Vector2D(1, 2), new Vector2D(3, 8), new Vector2D(4, 10));
+		Matrix2D m11 = new Matrix2D(Matrix2D.Orientation.ROW, new Vector2D(1, 2), new Vector2D(3, 8), new Vector2D(4, 10));
 		double[] b11 = new double[] {1, 2, 3};
 		Gauss gauss11 = Gauss.calculateGauss(m11, b11);
 		
@@ -136,7 +136,7 @@ public class GaussTest {
 		assertArrayEquals(new double[] {1, -1, 0}, gauss11.getB(), EPSILON);
 		
 		//a similar 3x2 system with no solution
-		Matrix2D m12 = new Matrix2D(Matrix2D.Orientation.COL, new Vector2D(1, 2), new Vector2D(3, 8), new Vector2D(4, 10));
+		Matrix2D m12 = new Matrix2D(Matrix2D.Orientation.ROW, new Vector2D(1, 2), new Vector2D(3, 8), new Vector2D(4, 10));
 		double[] b12 = new double[] {1, 2, 4};
 		Gauss gauss12 = Gauss.calculateGauss(m12, b12);
 		
@@ -152,7 +152,7 @@ public class GaussTest {
 		//1 2 3 | 6          1 2 3 | 6                1
 		//1 3 5 | 9     =>   0 1 2 | 3      =>    x = 1
 		//1 4 8 | 13         0 0 1 | 1                1
-		Matrix2D m2 = new Matrix2D(Matrix2D.Orientation.COL, new Vector3D(1, 2, 3), new Vector3D(1, 3, 5), new Vector3D(1, 4, 8));
+		Matrix2D m2 = new Matrix2D(Matrix2D.Orientation.ROW, new Vector3D(1, 2, 3), new Vector3D(1, 3, 5), new Vector3D(1, 4, 8));
 		double[] b2 = new double[] {6, 9, 13};
 		Gauss gauss2 = Gauss.calculateGauss(m2, b2);
 		
@@ -180,7 +180,7 @@ public class GaussTest {
 		
 
 		//a 4x3 system
-		Matrix2D m8 = new Matrix2D(Matrix2D.Orientation.ROW, new Vector3D(1, 2, 3), new Vector3D(1, 3, 5), new Vector3D(2, 8, 8), new Vector3D(3, 8, 5));
+		Matrix2D m8 = new Matrix2D(Matrix2D.Orientation.COL, new Vector3D(1, 2, 3), new Vector3D(1, 3, 5), new Vector3D(2, 8, 8), new Vector3D(3, 8, 5));
 		double[] b8 = new double[] {1, 1, 1};
 		Gauss gauss8 = Gauss.calculateGauss(m8, b8);
 
@@ -208,7 +208,7 @@ public class GaussTest {
 		//using the same systems as in the first test (calculateGauss) here
 		
 		//start with a very simple system
-		Matrix2D m = new Matrix2D(Matrix2D.Orientation.COL, new Vector2D(1, 2), new Vector2D(1, 3));
+		Matrix2D m = new Matrix2D(Matrix2D.Orientation.ROW, new Vector2D(1, 2), new Vector2D(1, 3));
 		double[] b = new double[] {1, 2};
 		Gauss gauss = Gauss.calculateGauss(m, b);
 		
@@ -218,35 +218,35 @@ public class GaussTest {
 		//1 2 3 | 6          1 2 3 | 6                1
 		//1 3 5 | 9     =>   0 1 2 | 3      =>    x = 1
 		//1 4 8 | 13         0 0 1 | 1                1
-		Matrix2D m2 = new Matrix2D(Matrix2D.Orientation.COL, new Vector3D(1, 2, 3), new Vector3D(1, 3, 5), new Vector3D(1, 4, 8));
+		Matrix2D m2 = new Matrix2D(Matrix2D.Orientation.ROW, new Vector3D(1, 2, 3), new Vector3D(1, 3, 5), new Vector3D(1, 4, 8));
 		double[] b2 = new double[] {6, 9, 13};
 		Gauss gauss2 = Gauss.calculateGauss(m2, b2);
 
 		assertArrayEquals(new double[] {1, 1, 1}, gauss2.getXVec(), EPSILON);
 		
 		//a not so simple 3x3 system
-		Matrix2D m3 = new Matrix2D(Matrix2D.Orientation.COL, new Vector3D(1, 3, 5), new Vector3D(3, -3, 9), new Vector3D(-1, 7, 2));
+		Matrix2D m3 = new Matrix2D(Matrix2D.Orientation.ROW, new Vector3D(1, 3, 5), new Vector3D(3, -3, 9), new Vector3D(-1, 7, 2));
 		double[] b3 = new double[] {3, 7, 2};
 		Gauss gauss3 = Gauss.calculateGauss(m3, b3);
 
 		assertArrayEquals(new double[] {-10d/3, -2d/3, 5d/3}, gauss3.getXVec(), EPSILON);
 		
 		//solution calculated by internet gauss solver
-		Matrix2D m4 = new Matrix2D(Matrix2D.Orientation.COL, new Vector3D(5, 7, 13), new Vector3D(7, 9, 2), new Vector3D(4, 8, 8));
+		Matrix2D m4 = new Matrix2D(Matrix2D.Orientation.ROW, new Vector3D(5, 7, 13), new Vector3D(7, 9, 2), new Vector3D(4, 8, 8));
 		double[] b4 = new double[] {2, 11, 8};
 		Gauss gauss4 = Gauss.calculateGauss(m4, b4);
 
 		assertArrayEquals(new double[] {-46d/51, 35d/17, -31d/51}, gauss4.getXVec(), EPSILON);
 		
 		//a solution where the lines have to be switched
-		Matrix2D m5 = new Matrix2D(Matrix2D.Orientation.COL, new Vector3D(1, 2, 3), new Vector3D(1, 2, 5), new Vector3D(3, 4, 6));
+		Matrix2D m5 = new Matrix2D(Matrix2D.Orientation.ROW, new Vector3D(1, 2, 3), new Vector3D(1, 2, 5), new Vector3D(3, 4, 6));
 		double[] b5 = new double[] {10, 3, 9};
 		Gauss gauss5 = Gauss.calculateGauss(m5, b5);
 
 		assertArrayEquals(new double[] {-11d, 63d/4, -7d/2}, gauss5.getXVec(), EPSILON);
 		
 		//a system where the swapping is not possible (but can be solved with multiple solutions with the given b-vector)
-		Matrix2D m6 = new Matrix2D(Matrix2D.Orientation.COL, new Vector3D(1, 2, 3), new Vector3D(1, 2, 5), new Vector3D(2, 4, 8));
+		Matrix2D m6 = new Matrix2D(Matrix2D.Orientation.ROW, new Vector3D(1, 2, 3), new Vector3D(1, 2, 5), new Vector3D(2, 4, 8));
 		double[] b6 = new double[] {10, 3, 13};
 		Gauss gauss6 = Gauss.calculateGauss(m6, b6);
 		
@@ -259,14 +259,14 @@ public class GaussTest {
 		}
 		
 		//another system where the swapping is not possible (but can NOT be solved with the given b-vector)
-		Matrix2D m7 = new Matrix2D(Matrix2D.Orientation.COL, new Vector3D(1, 2, 3), new Vector3D(1, 2, 5), new Vector3D(2, 4, 8));
+		Matrix2D m7 = new Matrix2D(Matrix2D.Orientation.ROW, new Vector3D(1, 2, 3), new Vector3D(1, 2, 5), new Vector3D(2, 4, 8));
 		double[] b7 = new double[] {10, 3, 0};
 		Gauss gauss7 = Gauss.calculateGauss(m7, b7);
 		
 		assertNull(gauss7.getXVec());
 		
 		//a 4x3 system
-		Matrix2D m8 = new Matrix2D(Matrix2D.Orientation.ROW, new Vector3D(1, 2, 3), new Vector3D(1, 3, 5), new Vector3D(2, 8, 8), new Vector3D(3, 8, 5));
+		Matrix2D m8 = new Matrix2D(Matrix2D.Orientation.COL, new Vector3D(1, 2, 3), new Vector3D(1, 3, 5), new Vector3D(2, 8, 8), new Vector3D(3, 8, 5));
 		double[] b8 = new double[] {1, 1, 1};
 		Gauss gauss8 = Gauss.calculateGauss(m8, b8);
 		
@@ -279,7 +279,7 @@ public class GaussTest {
 		}
 		
 		//a similar 4x3 system but this one can only be solved with two parameters (which this implementation can't calculate)
-		Matrix2D m9 = new Matrix2D(Matrix2D.Orientation.ROW, new Vector3D(1, 2, 3), new Vector3D(1, 3, 5), new Vector3D(2, 8, 14), new Vector3D(3, 8, 13));
+		Matrix2D m9 = new Matrix2D(Matrix2D.Orientation.COL, new Vector3D(1, 2, 3), new Vector3D(1, 3, 5), new Vector3D(2, 8, 14), new Vector3D(3, 8, 13));
 		double[] b9 = new double[] {1, 1, 1};
 		Gauss gauss9 = Gauss.calculateGauss(m9, b9);
 
@@ -292,14 +292,14 @@ public class GaussTest {
 		}
 		
 		//another similar 3x4 system but this one can NOT be solved (no parameters; it just has no solution)
-		Matrix2D m10 = new Matrix2D(Matrix2D.Orientation.ROW, new Vector3D(1, 2, 3), new Vector3D(1, 3, 5), new Vector3D(2, 8, 14), new Vector3D(3, 8, 13));
+		Matrix2D m10 = new Matrix2D(Matrix2D.Orientation.COL, new Vector3D(1, 2, 3), new Vector3D(1, 3, 5), new Vector3D(2, 8, 14), new Vector3D(3, 8, 13));
 		double[] b10 = new double[] {1, 1, 2};
 		Gauss gauss10 = Gauss.calculateGauss(m10, b10);
 		
 		assertNull(gauss10.getXVec());
 		
 		//a 3x2 system with a single solution
-		Matrix2D m11 = new Matrix2D(Matrix2D.Orientation.COL, new Vector2D(1, 2), new Vector2D(3, 8), new Vector2D(4, 10));
+		Matrix2D m11 = new Matrix2D(Matrix2D.Orientation.ROW, new Vector2D(1, 2), new Vector2D(3, 8), new Vector2D(4, 10));
 		double[] b11 = new double[] {1, 2, 3};
 		Gauss gauss11 = Gauss.calculateGauss(m11, b11);
 		
@@ -314,7 +314,7 @@ public class GaussTest {
 		}
 		
 		//a similar 3x2 system with no solution
-		Matrix2D m12 = new Matrix2D(Matrix2D.Orientation.COL, new Vector2D(1, 2), new Vector2D(3, 8), new Vector2D(4, 10));
+		Matrix2D m12 = new Matrix2D(Matrix2D.Orientation.ROW, new Vector2D(1, 2), new Vector2D(3, 8), new Vector2D(4, 10));
 		double[] b12 = new double[] {1, 2, 4};
 		Gauss gauss12 = Gauss.calculateGauss(m12, b12);
 		
@@ -326,7 +326,7 @@ public class GaussTest {
 		//using the same systems as in the first test (calculateGauss) here
 		
 		//start with a very simple system
-		Matrix2D m = new Matrix2D(Matrix2D.Orientation.COL, new Vector2D(1, 2), new Vector2D(1, 3));
+		Matrix2D m = new Matrix2D(Matrix2D.Orientation.ROW, new Vector2D(1, 2), new Vector2D(1, 3));
 		double[] b = new double[] {1, 2};
 		Gauss gauss = Gauss.calculateGauss(m, b);
 		
@@ -338,7 +338,7 @@ public class GaussTest {
 		//1 2 3 | 6          1 2 3 | 6                1
 		//1 3 5 | 9     =>   0 1 2 | 3      =>    x = 1
 		//1 4 8 | 13         0 0 1 | 1                1
-		Matrix2D m2 = new Matrix2D(Matrix2D.Orientation.COL, new Vector3D(1, 2, 3), new Vector3D(1, 3, 5), new Vector3D(1, 4, 8));
+		Matrix2D m2 = new Matrix2D(Matrix2D.Orientation.ROW, new Vector3D(1, 2, 3), new Vector3D(1, 3, 5), new Vector3D(1, 4, 8));
 		double[] b2 = new double[] {6, 9, 13};
 		Gauss gauss2 = Gauss.calculateGauss(m2, b2);
 		
@@ -347,7 +347,7 @@ public class GaussTest {
 		assertArrayEquals(new double[] {0, 0, 0}, solutions2[1], EPSILON);
 		
 		//a not so simple 3x3 system
-		Matrix2D m3 = new Matrix2D(Matrix2D.Orientation.COL, new Vector3D(1, 3, 5), new Vector3D(3, -3, 9), new Vector3D(-1, 7, 2));
+		Matrix2D m3 = new Matrix2D(Matrix2D.Orientation.ROW, new Vector3D(1, 3, 5), new Vector3D(3, -3, 9), new Vector3D(-1, 7, 2));
 		double[] b3 = new double[] {3, 7, 2};
 		Gauss gauss3 = Gauss.calculateGauss(m3, b3);
 		
@@ -356,7 +356,7 @@ public class GaussTest {
 		assertArrayEquals(new double[] {0, 0, 0}, solutions3[1], EPSILON);
 		
 		//solution calculated by internet gauss solver
-		Matrix2D m4 = new Matrix2D(Matrix2D.Orientation.COL, new Vector3D(5, 7, 13), new Vector3D(7, 9, 2), new Vector3D(4, 8, 8));
+		Matrix2D m4 = new Matrix2D(Matrix2D.Orientation.ROW, new Vector3D(5, 7, 13), new Vector3D(7, 9, 2), new Vector3D(4, 8, 8));
 		double[] b4 = new double[] {2, 11, 8};
 		Gauss gauss4 = Gauss.calculateGauss(m4, b4);
 		
@@ -365,7 +365,7 @@ public class GaussTest {
 		assertArrayEquals(new double[] {0, 0, 0}, solutions4[1], EPSILON);
 		
 		//a solution where the lines have to be switched
-		Matrix2D m5 = new Matrix2D(Matrix2D.Orientation.COL, new Vector3D(1, 2, 3), new Vector3D(1, 2, 5), new Vector3D(3, 4, 6));
+		Matrix2D m5 = new Matrix2D(Matrix2D.Orientation.ROW, new Vector3D(1, 2, 3), new Vector3D(1, 2, 5), new Vector3D(3, 4, 6));
 		double[] b5 = new double[] {10, 3, 9};
 		Gauss gauss5 = Gauss.calculateGauss(m5, b5);
 		
@@ -374,7 +374,7 @@ public class GaussTest {
 		assertArrayEquals(new double[] {0, 0, 0}, solutions5[1], EPSILON);
 		
 		//a system where the swapping is not possible (but can be solved with multiple solutions with the given b-vector)
-		Matrix2D m6 = new Matrix2D(Matrix2D.Orientation.COL, new Vector3D(1, 2, 3), new Vector3D(1, 2, 5), new Vector3D(2, 4, 8));
+		Matrix2D m6 = new Matrix2D(Matrix2D.Orientation.ROW, new Vector3D(1, 2, 3), new Vector3D(1, 2, 5), new Vector3D(2, 4, 8));
 		double[] b6 = new double[] {10, 3, 13};
 		Gauss gauss6 = Gauss.calculateGauss(m6, b6);
 		
@@ -383,14 +383,14 @@ public class GaussTest {
 		assertArrayEquals(new double[] {-2, 1, 0}, solutions6[1], EPSILON);//x2 is the free parameter
 		
 		//another system where the swapping is not possible (but can NOT be solved with the given b-vector)
-		Matrix2D m7 = new Matrix2D(Matrix2D.Orientation.COL, new Vector3D(1, 2, 3), new Vector3D(1, 2, 5), new Vector3D(2, 4, 8));
+		Matrix2D m7 = new Matrix2D(Matrix2D.Orientation.ROW, new Vector3D(1, 2, 3), new Vector3D(1, 2, 5), new Vector3D(2, 4, 8));
 		double[] b7 = new double[] {10, 3, 0};
 		Gauss gauss7 = Gauss.calculateGauss(m7, b7);
 		
 		assertNull(gauss7.getSolutions());
 		
 		//a 4x3 system
-		Matrix2D m8 = new Matrix2D(Matrix2D.Orientation.ROW, new Vector3D(1, 2, 3), new Vector3D(1, 3, 5), new Vector3D(2, 8, 8), new Vector3D(3, 8, 5));
+		Matrix2D m8 = new Matrix2D(Matrix2D.Orientation.COL, new Vector3D(1, 2, 3), new Vector3D(1, 3, 5), new Vector3D(2, 8, 8), new Vector3D(3, 8, 5));
 		double[] b8 = new double[] {1, 1, 1};
 		Gauss gauss8 = Gauss.calculateGauss(m8, b8);
 
@@ -399,7 +399,7 @@ public class GaussTest {
 		assertArrayEquals(new double[] {-11d/3, 10d/3, -4d/3, 1}, solutions8[1], EPSILON);
 		
 		//a similar 4x3 system but this one can only be solved with two parameters (which this implementation can't calculate)
-		Matrix2D m9 = new Matrix2D(Matrix2D.Orientation.ROW, new Vector3D(1, 2, 3), new Vector3D(1, 3, 5), new Vector3D(2, 8, 14), new Vector3D(3, 8, 13));
+		Matrix2D m9 = new Matrix2D(Matrix2D.Orientation.COL, new Vector3D(1, 2, 3), new Vector3D(1, 3, 5), new Vector3D(2, 8, 14), new Vector3D(3, 8, 13));
 		double[] b9 = new double[] {1, 1, 1};
 		Gauss gauss9 = Gauss.calculateGauss(m9, b9);
 
@@ -412,14 +412,14 @@ public class GaussTest {
 		}
 		
 		//another similar 3x4 system but this one can NOT be solved (no parameters; it just has no solution)
-		Matrix2D m10 = new Matrix2D(Matrix2D.Orientation.ROW, new Vector3D(1, 2, 3), new Vector3D(1, 3, 5), new Vector3D(2, 8, 14), new Vector3D(3, 8, 13));
+		Matrix2D m10 = new Matrix2D(Matrix2D.Orientation.COL, new Vector3D(1, 2, 3), new Vector3D(1, 3, 5), new Vector3D(2, 8, 14), new Vector3D(3, 8, 13));
 		double[] b10 = new double[] {1, 1, 2};
 		Gauss gauss10 = Gauss.calculateGauss(m10, b10);
 		
 		assertNull(gauss10.getSolutions());
 		
 		//a 3x2 system with a single solution
-		Matrix2D m11 = new Matrix2D(Matrix2D.Orientation.COL, new Vector2D(1, 2), new Vector2D(3, 8), new Vector2D(4, 10));
+		Matrix2D m11 = new Matrix2D(Matrix2D.Orientation.ROW, new Vector2D(1, 2), new Vector2D(3, 8), new Vector2D(4, 10));
 		double[] b11 = new double[] {1, 2, 3};
 		Gauss gauss11 = Gauss.calculateGauss(m11, b11);
 		
@@ -428,7 +428,7 @@ public class GaussTest {
 		assertArrayEquals(new double[] {0, 0}, solutions11[1], EPSILON);
 		
 		//a similar 3x2 system with no solution
-		Matrix2D m12 = new Matrix2D(Matrix2D.Orientation.COL, new Vector2D(1, 2), new Vector2D(3, 8), new Vector2D(4, 10));
+		Matrix2D m12 = new Matrix2D(Matrix2D.Orientation.ROW, new Vector2D(1, 2), new Vector2D(3, 8), new Vector2D(4, 10));
 		double[] b12 = new double[] {1, 2, 4};
 		Gauss gauss12 = Gauss.calculateGauss(m12, b12);
 		

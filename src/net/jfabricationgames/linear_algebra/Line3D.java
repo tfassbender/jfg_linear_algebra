@@ -22,11 +22,32 @@ public class Line3D {
 	 * 		True if the point is on the line. False otherwise.
 	 */
 	public boolean isPointOnLine(Vector3D point) {
-		//the calculation of the parameter t is equal in all cases (x, y and z).
+		/*//the calculation of the parameter t is equal in all cases (x, y and z).
 		double t1 = direction.x == 0 ? 0 : ((start.x - point.x) / direction.x);
 		double t2 = direction.y == 0 ? 0 : ((start.y - point.y) / direction.y);
 		double t3 = direction.z == 0 ? 0 : ((start.z - point.z) / direction.z);
-		return Math.abs(t1-t2) < 1e-5 && Math.abs(t1-t3) < 1e-5 && t1 != 0;
+		if (direction.x == 0) {
+			return Math.abs(start.x - point.x) < 1e-8;
+		}
+		else if (direction.y == 0) {
+			return Math.abs(start.y - point.y) < 1e-8;
+		}
+		else if (direction.z == 0) {
+			return Math.abs(start.z - point.z) < 1e-8;
+		}
+		return Math.abs(t1-t2) < 1e-5 && Math.abs(t1-t3) < 1e-5 && t1 != 0;*/
+		
+		//solve a equation system to check whether the point is on the line
+		Matrix2D m = new Matrix2D(Matrix2D.Orientation.COL, direction);
+		double[] b = point.sub(start).asArray();
+		Gauss g = Gauss.calculateGauss(m, b);
+		try {
+			double[][] solutions = g.getSolutions();
+			return solutions != null;
+		}
+		catch (LinearAlgebraException lae) {
+			return false;
+		}
 	}
 	
 	/**

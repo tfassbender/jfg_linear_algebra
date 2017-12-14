@@ -10,9 +10,9 @@ public class Matrix2DTest {
 
 	@Test
 	public void testMatrix2DOrientationVector3DArray() {
-		Matrix2D m = new Matrix2D(Matrix2D.Orientation.COL, new Vector3D(1, 2, 3), 
+		Matrix2D m = new Matrix2D(Matrix2D.Orientation.ROW, new Vector3D(1, 2, 3), 
 				new Vector3D(4, 5, 6), new Vector3D(7, 8, 9));
-		Matrix2D m2 = new Matrix2D(Matrix2D.Orientation.ROW, new Vector3D(1, 2, 3), 
+		Matrix2D m2 = new Matrix2D(Matrix2D.Orientation.COL, new Vector3D(1, 2, 3), 
 				new Vector3D(4, 5, 6), new Vector3D(7, 8, 9));
 		
 		assertEquals(1, m.at(0,  0), EPSILON);
@@ -35,7 +35,7 @@ public class Matrix2DTest {
 
 	@Test
 	public void testClone() {
-		Matrix2D m = new Matrix2D(Matrix2D.Orientation.COL, new Vector3D(1, 2, 3), 
+		Matrix2D m = new Matrix2D(Matrix2D.Orientation.ROW, new Vector3D(1, 2, 3), 
 				new Vector3D(4, 5, 6), new Vector3D(7, 8, 9));
 		Matrix2D m2 = m.clone();
 		
@@ -56,7 +56,7 @@ public class Matrix2DTest {
 
 	@Test
 	public void testAt() {
-		Matrix2D m = new Matrix2D(Matrix2D.Orientation.COL, new Vector3D(1, 2, 3), 
+		Matrix2D m = new Matrix2D(Matrix2D.Orientation.ROW, new Vector3D(1, 2, 3), 
 				new Vector3D(4, 5, 6), new Vector3D(7, 8, 9));
 		Matrix2D m2 = Matrix2D.getUnitMatrix(3);
 		
@@ -73,7 +73,7 @@ public class Matrix2DTest {
 
 	@Test
 	public void testSet() {
-		Matrix2D m = new Matrix2D(Matrix2D.Orientation.COL, new Vector3D(1, 2, 3), 
+		Matrix2D m = new Matrix2D(Matrix2D.Orientation.ROW, new Vector3D(1, 2, 3), 
 				new Vector3D(4, 5, 6), new Vector3D(7, 8, 9));
 		
 		m.set(0, 0, 42);
@@ -92,11 +92,11 @@ public class Matrix2DTest {
 
 	@Test
 	public void testTranspose() {
-		Matrix2D m = new Matrix2D(Matrix2D.Orientation.ROW, new Vector3D(1, 2, 3), 
+		Matrix2D m = new Matrix2D(Matrix2D.Orientation.COL, new Vector3D(1, 2, 3), 
 				new Vector3D(4, 5, 6), new Vector3D(7, 8, 9));
 		Matrix2D m2 = m.transpose();
 		
-		Matrix2D m3 = new Matrix2D(Matrix2D.Orientation.ROW, new Vector3D(1, 2, 3));
+		Matrix2D m3 = new Matrix2D(Matrix2D.Orientation.COL, new Vector3D(1, 2, 3));
 		Matrix2D m4 = m3.transpose();
 		
 		assertTrue(m.equals(m.transpose().transpose()));
@@ -138,12 +138,12 @@ public class Matrix2DTest {
 
 	@Test
 	public void testGetDimensions() {
-		Matrix2D m = new Matrix2D(Matrix2D.Orientation.COL, new Vector3D(1, 2, 3), 
+		Matrix2D m = new Matrix2D(Matrix2D.Orientation.ROW, new Vector3D(1, 2, 3), 
 				new Vector3D(4, 5, 6), new Vector3D(7, 8, 9));
-		Matrix2D m2 = new Matrix2D(Matrix2D.Orientation.ROW, new Vector3D(1, 2, 3), 
+		Matrix2D m2 = new Matrix2D(Matrix2D.Orientation.COL, new Vector3D(1, 2, 3), 
 				new Vector3D(4, 5, 6), new Vector3D(7, 8, 9));
 		
-		Matrix2D m3 = new Matrix2D(Matrix2D.Orientation.ROW, new Vector3D(1, 2, 3));
+		Matrix2D m3 = new Matrix2D(Matrix2D.Orientation.COL, new Vector3D(1, 2, 3));
 		Matrix2D m4 = m3.transpose();
 		
 		assertArrayEquals(new int[] {3, 3}, m.getDimensions());
@@ -151,5 +151,4 @@ public class Matrix2DTest {
 		assertArrayEquals(new int[] {3, 1}, m3.getDimensions());
 		assertArrayEquals(new int[] {1, 3}, m4.getDimensions());
 	}
-
 }
