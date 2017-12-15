@@ -10,6 +10,23 @@ public class Line3D {
 	public Line3D(Vector3D start, Vector3D direction) {
 		this.start = start;
 		this.direction = direction;
+		if (direction.equals(Vector3D.NULL_VEC)) {
+			throw new LinearAlgebraException("A Line's direction vector can't be a null-vector.");
+		}
+	}
+	
+	/**
+	 * Check whether a line is equal to this line.
+	 * Equal means the lines have linearly dependent directions and a point of the parameter line is on this line.
+	 * 
+	 * @param line
+	 * 		The other line.
+	 * 
+	 * @return
+	 * 		True if the two lines describe the same line. False otherwise.
+	 */
+	public boolean lineEquals(Line3D line) {
+		return line.getDirection().isLinearlyDependent(direction) && isPointOnLine(line.getStart());
 	}
 	
 	/**

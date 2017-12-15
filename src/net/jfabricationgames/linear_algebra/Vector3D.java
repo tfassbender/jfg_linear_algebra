@@ -9,6 +9,7 @@ public class Vector3D {
 	public double z;
 	
 	public static final Vector3D NAN_VEC = new Vector3D(Double.NaN, Double.NaN, Double.NaN);
+	public static final Vector3D NULL_VEC = new Vector3D(0, 0, 0);
 	
 	public enum Axis {
 		X,

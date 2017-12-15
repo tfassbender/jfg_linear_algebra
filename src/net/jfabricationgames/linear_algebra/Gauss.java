@@ -106,10 +106,10 @@ public class Gauss {
 			tmp = m.entries[k][i];
 			m.entries[k][i] = m.entries[k][j];
 			m.entries[k][j] = tmp;
-			tmp = b[i];
-			b[i] = b[j];
-			b[j] = tmp;
 		}
+		tmp = b[i];
+		b[i] = b[j];
+		b[j] = tmp;
 	}
 	
 	private static void swapCols(Matrix2D m, double[] b, int i, int j) {
@@ -332,7 +332,7 @@ public class Gauss {
 		boolean swapCols = false;
 		if (Math.abs(m.at(newDimension[1]-1, newDimension[0]-1)) < EPSILON && dimensions[1] > newDimension[1] && 
 				Math.abs(m.at(newDimension[1], newDimension[0]-1)) > EPSILON) {
-			swapCols(m, b, dimensions[0]-1, dimensions[0]-2);
+			swapCols(m, b, dimensions[1]-1, dimensions[1]-2);
 			swapCols = true;
 		}
 		Matrix2D altM = new Matrix2D(newDimension[1], newDimension[0]);

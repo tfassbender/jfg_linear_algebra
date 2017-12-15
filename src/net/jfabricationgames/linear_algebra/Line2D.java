@@ -8,6 +8,9 @@ public class Line2D {
 	public Line2D(Vector2D start, Vector2D direction) {
 		this.start = start;
 		this.direction = direction;
+		if (direction.equals(Vector3D.NULL_VEC)) {
+			throw new LinearAlgebraException("A Line's direction vector can't be a null-vector.");
+		}
 	}
 	
 	/**
