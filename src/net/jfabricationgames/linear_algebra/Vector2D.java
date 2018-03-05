@@ -6,6 +6,7 @@ public class Vector2D implements Cloneable {
 	public double y;
 	
 	public static final Vector2D NAN_VEC = new Vector2D(Double.NaN, Double.NaN);
+	public static final Vector2D NULL_VEC = new Vector2D(0, 0);
 	
 	public enum Axis {
 		X,
