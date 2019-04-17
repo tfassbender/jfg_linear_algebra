@@ -1,8 +1,11 @@
 package net.jfabricationgames.linear_algebra;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class LineSegment2DTest {
 	
@@ -52,5 +55,4 @@ public class LineSegment2DTest {
 		assertEquals(new Vector2D(1, 1), l1.calculateCrosspoint(l3));
 		assertNull(l2.calculateCrosspoint(l3));
 	}
-
 }
