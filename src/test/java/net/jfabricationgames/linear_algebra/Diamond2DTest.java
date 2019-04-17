@@ -1,8 +1,10 @@
 package net.jfabricationgames.linear_algebra;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class Diamond2DTest {
 	
@@ -26,9 +28,9 @@ public class Diamond2DTest {
 		new Diamond2D(new Vector2D(1, 1), new Vector2D(2, 3), new Vector2D(3, 1), new Vector2D(2, -1));
 	}
 	
-	@Test(expected = LinearAlgebraException.class)
+	@Test()
 	public void testDiamond2DVector2DArrayException() {
-		new Diamond2D(new Vector2D(0, 0), new Vector2D(1, 1), new Vector2D(2, 1), new Vector2D(2, 0));
+		assertThrows(LinearAlgebraException.class, () -> new Diamond2D(new Vector2D(0, 0), new Vector2D(1, 1), new Vector2D(2, 1), new Vector2D(2, 0)));
 	}
 	
 	@Test

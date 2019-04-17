@@ -1,8 +1,9 @@
 package net.jfabricationgames.linear_algebra;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class Kite2DTest {
 	
@@ -20,10 +21,10 @@ public class Kite2DTest {
 		new Kite2D(new Vector2D(1, 1), new Vector2D(2, 5), new Vector2D(3, 1), new Vector2D(2, 3));
 	}
 	
-	@Test(expected = LinearAlgebraException.class)
+	@Test()
 	public void testKite2DVector2DArrayException() {
 		//create wrong kites to cause an exception
-		new Kite2D(new Vector2D(1, 1), new Vector2D(2, 3), new Vector2D(3, 1), new Vector2D(3, 0));
+		assertThrows(LinearAlgebraException.class, () -> new Kite2D(new Vector2D(1, 1), new Vector2D(2, 3), new Vector2D(3, 1), new Vector2D(3, 0)));
 	}
 	
 	@Test

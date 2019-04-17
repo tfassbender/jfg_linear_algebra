@@ -1,17 +1,20 @@
 package net.jfabricationgames.linear_algebra;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Arrays;
 import java.util.List;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class Area2DTest {
 	
 	public static final double EPSILON = 1e-8;
 	
-	@Test(expected = LinearAlgebraException.class)
+	@Test()
 	public void testGetSize() {
 		Area2D area = new Area2D(new Vector2D(2, 3), new Vector2D(4, 5), new Vector2D(3, 7));//a triangle
 		Area2D area2 = new Area2D(new Vector2D(0, 0), new Vector2D(5, 0), new Vector2D(5, 5), new Vector2D(0, 5));//a rectangle
@@ -19,7 +22,8 @@ public class Area2DTest {
 		
 		assertEquals(3, area.getSize(), EPSILON);
 		assertEquals(25, area2.getSize(), EPSILON);
-		assertEquals(42, area3.getSize(), EPSILON);//expect exception here
+		assertThrows(LinearAlgebraException.class, () -> area3.getSize());
+		//assertEquals(42, area3.getSize(), EPSILON);//expect exception here
 	}
 	
 	@Test
@@ -38,7 +42,7 @@ public class Area2DTest {
 		assertFalse(area5.isConvex());
 	}
 
-	@Test(expected = LinearAlgebraException.class)
+	@Test()
 	public void testIsPointInArea() {
 		Area2D area = new Area2D(new Vector2D(0, 0), new Vector2D(10, 0), new Vector2D(10, 10), new Vector2D(0, 10));
 		
@@ -56,7 +60,7 @@ public class Area2DTest {
 		
 		//non-convex polygon area
 		Area2D area2 = new Area2D(new Vector2D(0, 0), new Vector2D(5, 0), new Vector2D(1, 1), new Vector2D(0, 5));
-		area2.isPointInArea(new Vector2D(0, 0));//expect exception here
+		assertThrows(LinearAlgebraException.class, () -> area2.isPointInArea(new Vector2D(0, 0)));//expect exception here
 	}
 
 	@Test

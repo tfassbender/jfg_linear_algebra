@@ -1,11 +1,12 @@
 package net.jfabricationgames.linear_algebra;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class Triangle2DTest {
 	
@@ -33,9 +34,9 @@ public class Triangle2DTest {
 		new Triangle2D(p);
 	}
 	
-	@Test(expected = LinearAlgebraException.class)
+	@Test()
 	public void testTriangle2DException() {
-		new Triangle2D(new Vector2D(0, 0), new Vector2D(1, 1));
-		new Triangle2D(new Vector2D(0, 0), new Vector2D(2, 2), new Vector2D(1, 1), new Vector2D(1, 0));
+		assertThrows(LinearAlgebraException.class, () -> new Triangle2D(new Vector2D(0, 0), new Vector2D(1, 1)));
+		assertThrows(LinearAlgebraException.class, () -> new Triangle2D(new Vector2D(0, 0), new Vector2D(2, 2), new Vector2D(1, 1), new Vector2D(1, 0)));
 	}
 }
