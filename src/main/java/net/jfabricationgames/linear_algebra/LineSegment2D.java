@@ -10,17 +10,16 @@ public class LineSegment2D extends Line2D {
 	 * Calculate the crossing point of two line segments (or this line segment and a line).
 	 * 
 	 * @param line
-	 * 		The line which's crossing-point with this line is calculated.
+	 *        The line which's crossing-point with this line is calculated.
 	 * 
-	 * @return
-	 * 		The crossing point of the two lines (if there is one).
+	 * @return The crossing point of the two lines (if there is one).
 	 */
 	@Override
 	public Vector2D calculateCrosspoint(Line2D line) {
 		if (line instanceof LineSegment2D) {
-			return calculateCrosspoint(line);
+			return calculateCrosspoint((LineSegment2D) line);
 		}
-		Vector2D crosspoint = super.calculateCrosspoint(line);
+		Vector2D crosspoint = super.calculateCrosspointUnchecked(line);
 		double t = calculateT(crosspoint);
 		if (t >= 0 && t <= 1) {
 			return crosspoint;
@@ -31,13 +30,12 @@ public class LineSegment2D extends Line2D {
 	 * Calculate the crossing point of two line segments.
 	 * 
 	 * @param line
-	 * 		The line which's crossing-point with this line is calculated.
+	 *        The line which's crossing-point with this line is calculated.
 	 * 
-	 * @return
-	 * 		The crossing point of the two line segments (if there is one).
+	 * @return The crossing point of the two line segments (if there is one).
 	 */
 	public Vector2D calculateCrosspoint(LineSegment2D line) {
-		Vector2D crosspoint = super.calculateCrosspoint(line);
+		Vector2D crosspoint = super.calculateCrosspointUnchecked(line);
 		double t = calculateT(crosspoint);
 		double t2 = line.calculateT(crosspoint);
 		if (t >= 0 && t <= 1 && t2 >= 0 && t2 <= 1) {
@@ -50,10 +48,9 @@ public class LineSegment2D extends Line2D {
 	 * Check whether a point is on this line.
 	 * 
 	 * @param point
-	 * 		The checked point.
+	 *        The checked point.
 	 * 
-	 * @return
-	 * 		True if the point is on the line. False otherwise.
+	 * @return True if the point is on the line. False otherwise.
 	 */
 	@Override
 	public boolean isPointOnLine(Vector2D point) {
@@ -66,17 +63,16 @@ public class LineSegment2D extends Line2D {
 		else if (direction.y == 0) {
 			return Math.abs(start.y - point.y) < 1e-8 && t1 >= 0 && t1 <= 1;
 		}
-		return Math.abs(t1-t2) < 1e-5 && t1 >= 0 && t1 <= 1;
+		return Math.abs(t1 - t2) < 1e-5 && t1 >= 0 && t1 <= 1;
 	}
 	
 	/**
 	 * Calculate the minimum distance between a point and this line.
 	 * 
 	 * @param point
-	 * 		The point.
+	 *        The point.
 	 * 
-	 * @return
-	 * 		The minimum distance between the point and this line.
+	 * @return The minimum distance between the point and this line.
 	 */
 	@Override
 	public double calculateMinDistToPoint(Vector2D point) {
@@ -92,5 +88,5 @@ public class LineSegment2D extends Line2D {
 			//the shortest distance is from one of the edges
 			return Math.min(start.distance(point), start.add(direction).distance(point));
 		}
-    }
+	}
 }

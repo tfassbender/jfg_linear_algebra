@@ -168,7 +168,7 @@ public class Vector3DTest {
 		assertEquals(new Vector3D(0, 0, 0), v.cross(v2));
 		assertEquals(new Vector3D(-3, 1, 0), v.cross(v3));
 		assertEquals(new Vector3D(-6, 2, 0), v2.cross(v3));
-
+		
 		assertEquals(v.cross(v3), v3.cross(v).mult(-1));
 	}
 	
@@ -190,13 +190,29 @@ public class Vector3DTest {
 	}
 	
 	@Test
+	public void testDistanceWithNorm() {
+		Vector3D v = new Vector3D(1, 3, 5);
+		Vector3D v2 = new Vector3D(2, 6, 10);
+		Vector3D v3 = new Vector3D(1, 3, 4);
+		
+		assertEquals(9, v.distance(v2, 1), EPSILON);
+		assertEquals(1, v.distance(v3, 1), EPSILON);
+		
+		assertEquals(Math.sqrt(35), v.distance(v2, 2), EPSILON);
+		assertEquals(1, v.distance(v3, 2), EPSILON);
+		
+		assertEquals(Math.pow(153, 1d / 3), v.distance(v2, 3), EPSILON);
+		assertEquals(1, v.distance(v3, 3), EPSILON);
+	}
+	
+	@Test
 	public void testMoveTo() {
 		Vector3D v = new Vector3D(1, 3, 5);
 		Vector3D v2 = new Vector3D(2, 6, 10);
 		Vector3D v3 = new Vector3D(1, 3, 4);
 		
 		assertEquals(v2, v.moveTo(v2, Math.sqrt(35)));
-		assertEquals(new Vector3D(3, 9, 15), v.moveTo(v2, 2*Math.sqrt(35)));
+		assertEquals(new Vector3D(3, 9, 15), v.moveTo(v2, 2 * Math.sqrt(35)));
 		assertEquals(v3, v.moveTo(v3, v.distance(v3)));
 	}
 	
@@ -232,13 +248,13 @@ public class Vector3DTest {
 		assertTrue(v.isInRange(v2, 42));
 		
 		assertFalse(v.isInRange(v2, 1));
-		assertFalse(v.isInRange(v2, 2-EPSILON));
+		assertFalse(v.isInRange(v2, 2 - EPSILON));
 		
 		assertTrue(v.isInRange(v3, Math.sqrt(3)));
 		assertTrue(v.isInRange(v3, 42));
 		
 		assertFalse(v.isInRange(v3, 1));
-		assertFalse(v.isInRange(v3, Math.sqrt(3)-EPSILON));
+		assertFalse(v.isInRange(v3, Math.sqrt(3) - EPSILON));
 	}
 	
 }
