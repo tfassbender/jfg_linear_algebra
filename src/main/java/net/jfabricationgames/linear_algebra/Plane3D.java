@@ -21,15 +21,14 @@ public class Plane3D {
 	 * Calculate the intersection point of a Line3D with this plane.
 	 * 
 	 * @param line
-	 * 		The line that may intersects this plane.
+	 *        The line that may intersects this plane.
 	 * 
-	 * @return
-	 * 		The intersection point as Vector3D if there is one.
-	 * 		If there is no intersection point because the line is parallel to the plane null is returned.
-	 * 		If there are infinite intersection points a {@link LinearAlgebraException} is thrown.
+	 * @return The intersection point as Vector3D if there is one. If there is no intersection point because the line is parallel to the plane null is
+	 *         returned. If there are infinite intersection points a {@link LinearAlgebraException} is thrown.
 	 * 
 	 * @throws LinearAlgebraException
-	 * 		A {@link LinearAlgebraException} is thrown when the line lies in the plane (so there are infinite crossing points) or the calculation fails for some reason.
+	 *         A {@link LinearAlgebraException} is thrown when the line lies in the plane (so there are infinite crossing points) or the calculation
+	 *         fails for some reason.
 	 */
 	public Vector3D getIntersectionPoint(Line3D line) throws LinearAlgebraException {
 		//check whether the line is parallel to the plane
@@ -40,7 +39,7 @@ public class Plane3D {
 			}
 			else {
 				//the line is parallel to the plane
-				return null;				
+				return null;
 			}
 		}
 		//solve a gauss system to find the cross-point
@@ -57,13 +56,37 @@ public class Plane3D {
 	}
 	
 	/**
+	 * Calculate the intersection point of a LineSegment3D with this plane.
+	 * 
+	 * @param line
+	 *        The line segment that may intersects this plane.
+	 * 
+	 * @return The intersection point as Vector3D if there is one. If there is no intersection point, null is returned (because the line is parallel
+	 *         to the plane or the line segment doesn't reach the intersection point of a line). If there are infinite intersection points a
+	 *         {@link LinearAlgebraException} is thrown.
+	 * 
+	 * @throws LinearAlgebraException
+	 *         A {@link LinearAlgebraException} is thrown when the line lies in the plane (so there are infinite crossing points) or the calculation
+	 *         fails for some reason.
+	 */
+	public Vector3D getIntersectionPointLineSegment(LineSegment3D line) throws LinearAlgebraException {
+		Vector3D intersectionPoint = getIntersectionPoint(line);
+		
+		if (intersectionPoint != null && line.isPointOnLine(intersectionPoint)) {
+			return intersectionPoint;
+		}
+		else {
+			return null;
+		}
+	}
+	
+	/**
 	 * Calculate the distance from this plane to a point.
 	 * 
 	 * @param point
-	 * 		The point to which the distance is calculated.
+	 *        The point to which the distance is calculated.
 	 * 
-	 * @return
-	 * 		The distance to the point.
+	 * @return The distance to the point.
 	 */
 	public double getDistance(Vector3D point) {
 		//create a line from the point with the normal vector as direction
@@ -78,15 +101,13 @@ public class Plane3D {
 	 * Calculate the intersection line of a Plane3D with this plane.
 	 * 
 	 * @param plane
-	 * 		The other plane.
+	 *        The other plane.
 	 * 
-	 * @return
-	 * 		The intersection line if there is one.
-	 * 		If the planes are parallel null is returned.
-	 * 		If the planes are the same a {@link LinearAlgebraException} is thrown.
+	 * @return The intersection line if there is one. If the planes are parallel null is returned. If the planes are the same a
+	 *         {@link LinearAlgebraException} is thrown.
 	 * 
 	 * @throws LinearAlgebraException
-	 * 		A {@link LinearAlgebraException} is thrown when the planes are the same or if the calculation isn't successful for some reason.
+	 *         A {@link LinearAlgebraException} is thrown when the planes are the same or if the calculation isn't successful for some reason.
 	 */
 	/*public Line3D getIntersectionLine(Plane3D plane) throws LinearAlgebraException {
 		//check whether the planes are parallel or the same (using the normal-vectors...)
@@ -118,10 +139,9 @@ public class Plane3D {
 	 * Check whether a Line3D is in the plane.
 	 * 
 	 * @param line
-	 * 		The line that is checked.
+	 *        The line that is checked.
 	 * 
-	 * @return
-	 * 		True if the line lies in this plane. False otherwise.
+	 * @return True if the line lies in this plane. False otherwise.
 	 */
 	public boolean isOnPlane(Line3D line) {
 		return isOnPlane(line.start) && Vector3D.isLinearlyDependentVectors(line.direction, direction1, direction2);
@@ -131,10 +151,9 @@ public class Plane3D {
 	 * Check whether a point is on this plane.
 	 * 
 	 * @param point
-	 * 		The point that is checked.
+	 *        The point that is checked.
 	 * 
-	 * @return
-	 * 		True if the point is on this plane. False otherwise.
+	 * @return True if the point is on this plane. False otherwise.
 	 */
 	public boolean isOnPlane(Vector3D point) {
 		//create an equation system and solve it to check if the point is on the line
@@ -179,8 +198,7 @@ public class Plane3D {
 	/**
 	 * Get the normal vector of this plane.
 	 * 
-	 * @return
-	 * 		The normal vector.
+	 * @return The normal vector.
 	 */
 	public Vector3D getNormalVector() {
 		return direction1.cross(direction2);

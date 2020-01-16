@@ -16,14 +16,13 @@ public class Line3D {
 	}
 	
 	/**
-	 * Check whether a line is equal to this line.
-	 * Equal means the lines have linearly dependent directions and a point of the parameter line is on this line.
+	 * Check whether a line is equal to this line. Equal means the lines have linearly dependent directions and a point of the parameter line is on
+	 * this line.
 	 * 
 	 * @param line
-	 * 		The other line.
+	 *        The other line.
 	 * 
-	 * @return
-	 * 		True if the two lines describe the same line. False otherwise.
+	 * @return True if the two lines describe the same line. False otherwise.
 	 */
 	public boolean lineEquals(Line3D line) {
 		return line.getDirection().isLinearlyDependent(direction) && isPointOnLine(line.getStart());
@@ -33,10 +32,9 @@ public class Line3D {
 	 * Check whether a point is on this line.
 	 * 
 	 * @param point
-	 * 		The checked point.
+	 *        The checked point.
 	 * 
-	 * @return
-	 * 		True if the point is on the line. False otherwise.
+	 * @return True if the point is on the line. False otherwise.
 	 */
 	public boolean isPointOnLine(Vector3D point) {
 		/*//the calculation of the parameter t is equal in all cases (x, y and z).
@@ -71,15 +69,14 @@ public class Line3D {
 	 * Calculate the parameter t which describes how often the vector direction is to be added to the start vector to get to the point.
 	 * 
 	 * @param point
-	 * 		The checked point.
+	 *        The checked point.
 	 * 
-	 * @return
-	 * 		If the point is on the line the parameter t is returned. Double.NaN otherwise.
+	 * @return If the point is on the line the parameter t is returned. Double.NaN otherwise.
 	 */
 	public double calculateT(Vector3D point) {
 		if (isPointOnLine(point)) {
 			if (direction.x != 0) {
-				return -((start.x - point.x) / direction.x);				
+				return -((start.x - point.x) / direction.x);
 			}
 			else if (direction.y != 0) {
 				return -((start.y - point.y) / direction.y);
@@ -95,19 +92,25 @@ public class Line3D {
 	 * Calculate the cross-point of a line with this line.
 	 * 
 	 * @param line
-	 * 		The other line.
+	 *        The other line.
 	 * 
-	 * @return
-	 * 		The cross-point as Vector3D object or null if there is no cross-point.
+	 * @return The cross-point as Vector3D object or null if there is no cross-point.
 	 */
 	public Vector3D calculateCrosspoint(Line3D line) {
+		if (line instanceof LineSegment3D) {
+			return line.calculateCrosspoint(this);
+		}
+		return calculateCrosspointUnchecked(line);
+	}
+	protected Vector3D calculateCrosspointUnchecked(Line3D line) {
 		if (direction.isLinearlyDependent(line.direction)) {
 			//parallel or equal -> no single cross-point
 			return null;
 		}
 		//create an equation system and solve it to check if the lines cross
 		//create a 2x2 system to calculate t1 and t2
-		Matrix2D m = new Matrix2D(Matrix2D.Orientation.COL, new double[] {direction.x, direction.y}, new double[] {-line.direction.x, -line.direction.y});
+		Matrix2D m = new Matrix2D(Matrix2D.Orientation.COL, new double[] {direction.x, direction.y},
+				new double[] {-line.direction.x, -line.direction.y});
 		double[] b = new double[] {line.start.x - start.x, line.start.y - start.y};
 		Gauss gauss = Gauss.calculateGauss(m, b);
 		try {

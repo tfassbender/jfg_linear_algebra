@@ -43,6 +43,35 @@ public class Plane3DTest {
 	}
 	
 	@Test
+	public void testGetIntersectionPointLineSegment() {
+		LineSegment3D line = new LineSegment3D(new Vector3D(0, 0, 0), new Vector3D(1, 1, 1));
+		LineSegment3D line2 = new LineSegment3D(new Vector3D(1, 1, 0), new Vector3D(1, 0, 0));
+		LineSegment3D line3 = new LineSegment3D(new Vector3D(1, 2, 3), new Vector3D(2, 2, 0));
+		
+		Plane3D planeXY = new Plane3D(new Vector3D(0, 0, 0), new Vector3D(1, 0, 0), new Vector3D(0, 1, 0));
+		Plane3D planeXZ = new Plane3D(new Vector3D(0, 0, 0), new Vector3D(1, 0, 0), new Vector3D(0, 0, 1));
+		Plane3D plane = new Plane3D(new Vector3D(1, 1, 0), new Vector3D(1, 1, -1), new Vector3D(2, 0, 1));
+		
+		assertArrayEquals(new double[] {0, 0, 0}, planeXY.getIntersectionPointLineSegment(line).asArray(), EPSILON);
+		try {
+			planeXY.getIntersectionPointLineSegment(line2);
+			fail("A LinearAlgebraException was expected here...");
+		}
+		catch (LinearAlgebraException lae) {
+			//do nothing here because the exception was expected
+		}
+		assertNull(planeXY.getIntersectionPointLineSegment(line3));
+		
+		assertArrayEquals(new double[] {0, 0, 0}, planeXZ.getIntersectionPointLineSegment(line).asArray(), EPSILON);
+		assertNull(planeXZ.getIntersectionPointLineSegment(line2));
+		assertNull(planeXZ.getIntersectionPointLineSegment(line3));
+		
+		assertArrayEquals(new double[] {0.5, 0.5, 0.5}, plane.getIntersectionPointLineSegment(line).asArray(), EPSILON);
+		assertArrayEquals(new double[] {1, 1, 0}, plane.getIntersectionPointLineSegment(line2).asArray(), EPSILON);
+		assertNull(plane.getIntersectionPointLineSegment(line3));
+	}
+	
+	@Test
 	public void testIsOnPlaneLine3D() {
 		Line3D line = new Line3D(new Vector3D(0, 0, 0), new Vector3D(1, 1, 1));
 		Line3D line2 = new Line3D(new Vector3D(1, 1, 0), new Vector3D(1, 0, 0));
@@ -74,12 +103,12 @@ public class Plane3DTest {
 		assertEquals(0, planeXY.getDistance(new Vector3D(0, 0, 0)), EPSILON);
 		assertEquals(1, planeXY.getDistance(new Vector3D(1, 1, 1)), EPSILON);
 		assertEquals(17, planeXY.getDistance(new Vector3D(5, 42, 17)), EPSILON);
-
+		
 		assertEquals(3, planeXZ.getDistance(new Vector3D(2, 3, 4)), EPSILON);
 		assertEquals(42, planeXZ.getDistance(new Vector3D(5, 42, 17)), EPSILON);
-
+		
 		assertEquals(Math.sqrt(14), plane.getDistance(new Vector3D(2, -2, -2)), EPSILON);
-		assertEquals(3d/2 * Math.sqrt(14), plane.getDistance(new Vector3D(4, 5, 6)), EPSILON);
+		assertEquals(3d / 2 * Math.sqrt(14), plane.getDistance(new Vector3D(4, 5, 6)), EPSILON);
 	}
 	
 	@Test
@@ -106,7 +135,7 @@ public class Plane3DTest {
 		Plane3D planeXY = new Plane3D(new Vector3D(0, 0, 0), new Vector3D(1, 0, 0), new Vector3D(0, 1, 0));
 		Plane3D planeXZ = new Plane3D(new Vector3D(0, 0, 0), new Vector3D(1, 0, 0), new Vector3D(0, 0, 1));
 		Plane3D plane = new Plane3D(new Vector3D(1, 1, 0), new Vector3D(1, 1, -1), new Vector3D(2, 0, 1));
-
+		
 		assertEquals(new Vector3D(0, 0, 1), planeXY.getNormalVector());
 		assertEquals(new Vector3D(0, -1, 0), planeXZ.getNormalVector());
 		assertEquals(new Vector3D(1, -3, -2), plane.getNormalVector());

@@ -95,58 +95,6 @@ public class Area2D {
 	 * 		A {@link LinearAlgebraException} is thrown if the area is not convex.
 	 */
 	public boolean isPointInArea(Vector2D p) throws LinearAlgebraException {
-		//this algorithm seems not to be working right... use triangle area instead
-		/*Vector2D start = p.clone();
-		Vector2D vec;//a vector in any direction
-		int crossPoints = 0;//count the number of lines the vector from the point crosses
-		int triesLeft = 100;//if you can't find an answer after 100 tests interrupt
-		boolean foundAnswer;
-		for (int i = 0; i < triesLeft; i++) {
-			vec = new Vector2D(Math.random()*90 + 10, Math.random()*90 + 10);//a vector in any direction
-			foundAnswer = true;
-			for (int j = 0; j < points.size(); j++) {
-				Vector2D polygonPoint2 = points.get((j+1)%points.size());
-				Vector2D polygonLineStart = points.get(j).clone();
-				Vector2D polygonLineVec = new Vector2D(polygonPoint2.x - polygonLineStart.x, polygonPoint2.y - polygonLineStart.y);
-				Vector2D crossPoint = new Line2D(start, vec).calculateCrosspoint(new Line2D(polygonLineStart, polygonLineVec));
-				if (crossPoint.x == Double.NaN || crossPoint.y == Double.NaN) {
-					foundAnswer = false;
-				}
-				else {
-					if (crossPoint.x >= Math.min(polygonLineStart.x, polygonPoint2.x) && crossPoint.x <= Math.max(polygonLineStart.x, polygonPoint2.x) &&
-							crossPoint.y >= Math.min(polygonLineStart.y, polygonPoint2.y) && crossPoint.y <= Math.max(polygonLineStart.y, polygonPoint2.y)) {
-						if (Math.signum(vec.x) < 0) {
-							if (Math.signum(vec.y) < 0) {
-								if (crossPoint.x < p.x && crossPoint.y < p.y) {
-									crossPoints++;
-								}
-							}
-							else {
-								if (crossPoint.x < p.x && crossPoint.y > p.y) {
-									crossPoints++;
-								}
-							}
-						}
-						else {
-							if (Math.signum(vec.y) < 0) {
-								if (crossPoint.x > p.x && crossPoint.y < p.y) {
-									crossPoints++;
-								}
-							}
-							else {
-								if (crossPoint.x > p.x && crossPoint.y > p.y) {
-									crossPoints++;
-								}
-							}
-						}
-					}
-				}
-			}
-			if (foundAnswer) {
-				return crossPoints % 2 == 1;
-			}
-		}
-		throw new LinearAlgebraException("Calculation failed. No result found");*/
 		double size = getSize();
 		double triangleAreaSum = 0;//sum up the areas from the point to the area points
 		int n = points.size();
