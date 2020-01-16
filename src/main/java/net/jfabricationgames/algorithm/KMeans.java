@@ -22,7 +22,7 @@ public class KMeans<T> {
 	 */
 	private double distanceThresholdForEqualCenters = 1e-5;
 	
-	public KMeans(int k, List<T> points, Function<T, Vector2D> vector2Dconverter, List<Vector2D> initialCenters) {
+	public KMeans(int k, List<T> points, List<Vector2D> initialCenters, Function<T, Vector2D> vector2Dconverter) {
 		this.k = k;
 		this.points = points;
 		this.vector2Dconverter = vector2Dconverter;
@@ -125,7 +125,7 @@ public class KMeans<T> {
 					included |= newCenter.distance(oldCenter) < distanceThresholdForEqualCenters;
 				}
 				//if one of the new centers is not included in the old center list the centers have changed
-				centersChanged &= !included;
+				centersChanged |= !included;
 			}
 			
 			//repeat until the centers are not changing anymore

@@ -1,8 +1,10 @@
 package net.jfabricationgames.algorithm;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -14,6 +16,7 @@ public class XMeans<T> {
 	private List<T> points;
 	private int kMin;
 	private int kMax;
+	private List<Vector2D> initialCenters;
 	private Function<T, Vector2D> vector2Dconverter;
 	
 	/**
@@ -37,10 +40,11 @@ public class XMeans<T> {
 	 */
 	private double improvementNeededToAcceptTheNewSolutionInPercent = 0.15;
 	
-	public XMeans(List<T> points, int kMin, int kMax, Function<T, Vector2D> vector2Dconverter) {
+	public XMeans(List<T> points, int kMin, int kMax, List<Vector2D> initialCenters, Function<T, Vector2D> vector2Dconverter) {
 		this.points = points;
 		this.kMin = kMin;
 		this.kMax = kMax;
+		this.initialCenters = initialCenters;
 		this.vector2Dconverter = vector2Dconverter;
 	}
 	
@@ -57,7 +61,7 @@ public class XMeans<T> {
 	 */
 	public Map<Vector2D, Set<T>> findClusters() {
 		//start with simple k means algorithm with k = kMin
-		Map<Vector2D, Set<T>> initialKMeans = findClusters_K_Means(points, null, kMin);
+		Map<Vector2D, Set<T>> initialKMeans = findClusters_K_Means(points, initialCenters, kMin);
 		Map<Vector2D, Set<T>> bestResult = initialKMeans;
 		double bestResultAverageDistToAllPoints = calculateAverageDistanceFromCentersToClusterPoints(bestResult);
 		
@@ -69,6 +73,9 @@ public class XMeans<T> {
 		while (k < kMax && clusterSplitted) {
 			clusterSplitted = false;
 			k++;
+			
+			//choose the best split if multiple were split
+			Map<Map<Vector2D, Set<T>>, Double> splitClusters = new HashMap<>();
 			
 			//try to split all centers (one after another)
 			for (int i = 0; i < centers.size(); i++) {
@@ -84,12 +91,30 @@ public class XMeans<T> {
 				
 				//use the new result if the average distance to all points is more than 15% reduced (customizable)
 				if (newAverageDistToAllPoints < bestResultAverageDistToAllPoints * (1 - improvementNeededToAcceptTheNewSolutionInPercent)) {
-					bestResult = newKMeansResult;
-					bestResultAverageDistToAllPoints = newAverageDistToAllPoints;
+					splitClusters.put(newKMeansResult, newAverageDistToAllPoints);
 					clusterSplitted = true;
-					//don't split another cluster but restart the outer (while) loop
-					break;
 				}
+			}
+			
+			if (!splitClusters.isEmpty()) {
+				//choose the best split and update the variables
+				Map<Vector2D, Set<T>> bestSplitCluster = null;
+				double bestSplitClusterScore = Double.POSITIVE_INFINITY;
+				for (Entry<Map<Vector2D, Set<T>>, Double> entry : splitClusters.entrySet()) {
+					if (entry.getValue() < bestSplitClusterScore) {
+						bestSplitCluster = entry.getKey();
+						bestSplitClusterScore = entry.getValue();
+					}
+				}
+				
+				if (bestSplitCluster == null) {
+					//should never happen
+					throw new IllegalStateException("no new cluster defined as best split cluster");
+				}
+				
+				bestResult = bestSplitCluster;
+				bestResultAverageDistToAllPoints = bestSplitClusterScore;
+				centers = new ArrayList<Vector2D>(bestSplitCluster.keySet());
 			}
 		}
 		
@@ -97,7 +122,7 @@ public class XMeans<T> {
 	}
 	
 	private Map<Vector2D, Set<T>> findClusters_K_Means(List<T> points, List<Vector2D> initialCenters, int k) {
-		KMeans<T> kMeans = new KMeans<>(k, points, vector2Dconverter, initialCenters);
+		KMeans<T> kMeans = new KMeans<>(k, points, initialCenters, vector2Dconverter);
 		return kMeans.findClusters();
 	}
 	
