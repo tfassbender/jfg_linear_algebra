@@ -36,9 +36,9 @@ public class XMeans<T> {
 	};
 	
 	/**
-	 * A better solution is assumed if the average distance to all points in the cluster is improved by at least this amount (as percent value)
+	 * A better solution is assumed if the average distance to all points in the cluster is improved by at least this amount
 	 */
-	private double improvementNeededToAcceptTheNewSolutionInPercent = 0.15;
+	private double improvementNeededToAcceptTheNewSolution = 0.15;
 	
 	public XMeans(List<T> points, int kMin, int kMax, List<Vector2D> initialCenters, Function<T, Vector2D> vector2Dconverter) {
 		this.points = points;
@@ -90,7 +90,7 @@ public class XMeans<T> {
 				double newAverageDistToAllPoints = calculateAverageDistanceFromCentersToClusterPoints(newKMeansResult);
 				
 				//use the new result if the average distance to all points is more than 15% reduced (customizable)
-				if (newAverageDistToAllPoints < bestResultAverageDistToAllPoints * (1 - improvementNeededToAcceptTheNewSolutionInPercent)) {
+				if (newAverageDistToAllPoints < bestResultAverageDistToAllPoints * (1 - improvementNeededToAcceptTheNewSolution)) {
 					splitClusters.put(newKMeansResult, newAverageDistToAllPoints);
 					clusterSplitted = true;
 				}
@@ -151,10 +151,13 @@ public class XMeans<T> {
 		this.splitStrategy = splitStrategy;
 	}
 	
-	public double getImprovementNeededToAcceptTheNewSolutionInPercent() {
-		return improvementNeededToAcceptTheNewSolutionInPercent;
+	public double getImprovementNeededToAcceptTheNewSolution() {
+		return improvementNeededToAcceptTheNewSolution;
 	}
-	public void setImprovementNeededToAcceptTheNewSolutionInPercent(double improvementNeededToAcceptTheNewSolutionInPercent) {
-		this.improvementNeededToAcceptTheNewSolutionInPercent = improvementNeededToAcceptTheNewSolutionInPercent;
+	public void setImprovementNeededToAcceptTheNewSolution(double improvementNeededToAcceptTheNewSolution) {
+		if (improvementNeededToAcceptTheNewSolution < 0 || improvementNeededToAcceptTheNewSolution > 1) {
+			throw new IllegalArgumentException("The improvement needed needs to be between 0 and 1");
+		}
+		this.improvementNeededToAcceptTheNewSolution = improvementNeededToAcceptTheNewSolution;
 	}
 }
