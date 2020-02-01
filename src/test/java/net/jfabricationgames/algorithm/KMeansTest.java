@@ -62,4 +62,19 @@ class KMeansTest {
 		assertTrue(clusters.get(new Vector2D(5.5, 1)).size() == 2);
 		assertTrue(clusters.get(new Vector2D(1, 7)).size() == 3);
 	}
+	
+	@Test
+	public void testFindTrivialAnswer() {
+		List<Vector2D> points = Arrays.asList(new Vector2D(1, 1), new Vector2D(3, 3), new Vector2D(2, 1));
+		KMeans<Vector2D> kMeans = new KMeans<>(3, points, null, v -> v);
+		
+		Map<Vector2D, Set<Vector2D>> clusters = kMeans.findTrivialAnswer();
+		assertTrue(clusters.keySet().contains(points.get(0)));
+		assertTrue(clusters.keySet().contains(points.get(1)));
+		assertTrue(clusters.keySet().contains(points.get(2)));
+
+		assertTrue(clusters.get(points.get(0)).size() == 1);
+		assertTrue(clusters.get(points.get(1)).size() == 1);
+		assertTrue(clusters.get(points.get(2)).size() == 1);
+	}
 }

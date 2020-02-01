@@ -1,12 +1,15 @@
 package net.jfabricationgames.algorithm;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
+
+import com.google.common.annotations.VisibleForTesting;
 
 import net.jfabricationgames.linear_algebra.Vector2D;
 
@@ -40,6 +43,14 @@ public class KMeans<T> {
 		}
 		if (k < 2) {
 			throw new IllegalArgumentException("The parameter k must be at least 2");
+		}
+		if (points.size() < k) {
+			throw new IllegalArgumentException(
+					"The number of points has to be greater or equal to k (k: " + k + "   #points: " + points.size() + ")");
+		}
+		if (points.size() == k) {
+			//the answer is trivial and is just returned
+			return findTrivialAnswer();
 		}
 		
 		Vector2D min = new Vector2D();//upper left corner
@@ -137,6 +148,16 @@ public class KMeans<T> {
 		} while (centersChanged);
 		
 		return finalClassification;
+	}
+	
+	/**
+	 * If the answer is trivial (case points.size == k) the answer is just constructed and returned.
+	 */
+	@VisibleForTesting
+	protected Map<Vector2D, Set<T>> findTrivialAnswer() {
+		Map<Vector2D, Set<T>> trivialAnswer = new HashMap<>();
+		points.forEach(p -> trivialAnswer.put(vector2Dconverter.apply(p), new HashSet<T>(Arrays.asList(p))));
+		return trivialAnswer;
 	}
 	
 	public double getDistanceThresholdForEqualCenters() {

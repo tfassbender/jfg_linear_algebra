@@ -17,7 +17,7 @@ class XMeansTest {
 	public void test2Clusters_2Points() {
 		List<Vector2D> points = Arrays.asList(new Vector2D(1, 1), new Vector2D(3, 3));
 		List<Vector2D> initialCenters = Arrays.asList(new Vector2D(2, 1), new Vector2D(3, 4));
-		XMeans<Vector2D> xMeans = new XMeans<>(points, 2, 3, initialCenters, v -> v);
+		XMeans<Vector2D> xMeans = new XMeans<>(points, 2, 2, initialCenters, v -> v);
 		
 		Map<Vector2D, Set<Vector2D>> clusters = xMeans.findClusters();
 		
@@ -34,7 +34,7 @@ class XMeansTest {
 		List<Vector2D> points = Arrays.asList(new Vector2D(1, 1), new Vector2D(3, 3), new Vector2D(2, 1), new Vector2D(1, 2), new Vector2D(2, 2));
 		List<Vector2D> initialCenters = Arrays.asList(new Vector2D(2, 1), new Vector2D(3, 4));
 		XMeans<Vector2D> xMeans = new XMeans<>(points, 2, 3, initialCenters, v -> v);
-		xMeans.setImprovementNeededToAcceptTheNewSolutionInPercent(0.5);//set a high improvement needed to not split
+		xMeans.setImprovementNeededToAcceptTheNewSolution(0.5);//set a high improvement needed to not split
 		
 		Map<Vector2D, Set<Vector2D>> clusters = xMeans.findClusters();
 		
